@@ -17,9 +17,10 @@ class SnippetManagerViewModel: ObservableObject {
     @Published var selectedTags: Set<String> = []
     @Published var alertItem: AlertItem?
     
-    private let context = CoreDataManager.shared.viewContext
+    private let context: NSManagedObjectContext
     
     init() {
+        self.context = CoreDataManager.shared.viewContext
         loadSnippets()
     }
     
@@ -65,6 +66,7 @@ class SnippetManagerViewModel: ObservableObject {
                 )
             }
         } catch {
+            print("Error loading snippets: \(error)")
             alertItem = AlertItem(
                 title: "Error",
                 message: "Failed to load snippets: \(error.localizedDescription)",
@@ -73,58 +75,68 @@ class SnippetManagerViewModel: ObservableObject {
         }
     }
     
-    func addSnippet(_ snippet: SnippetModel) {
-            let entity = CodeSnippetEntity(context: context)
-            updateEntity(entity, with: snippet)
-            CoreDataManager.shared.save()
-            loadSnippets()
-        }
+    func addSnippet(_ snippet: SnippetModel) async {
+        let entity = CodeSnippetEntity(context: context)
+        entity.id = snippet.id
+        entity.title = snippet.title
+        entity.code = snippet.code
+        entity.language = snippet.language
+        entity.tags = snippet.tags as NSObject
+        entity.dateCreated = snippet.dateCreated
         
-        func updateSnippet(_ snippet: SnippetModel) {
-            let request = NSFetchRequest<CodeSnippetEntity>(entityName: "CodeSnippetEntity")
-            request.predicate = NSPredicate(format: "id == %@", snippet.id as CVarArg)
-            
-            do {
-                let entities = try context.fetch(request)
-                if let entity = entities.first {
-                    updateEntity(entity, with: snippet)
-                    CoreDataManager.shared.save()
-                    loadSnippets()
-                }
-            } catch {
+        do {
+            try context.save()
+            loadSnippets()
+            alertItem = AlertItem(
+                title: "Success",
+                message: "Snippet added successfully",
+                dismissButton: "OK"
+            )
+        } catch {
+            print("Error adding snippet: \(error)")
+            alertItem = AlertItem(
+                title: "Error",
+                message: "Failed to save snippet: \(error.localizedDescription)",
+                dismissButton: "OK"
+            )
+        }
+    }
+    
+    func updateSnippet(_ snippet: SnippetModel) async {
+        let request = NSFetchRequest<CodeSnippetEntity>(entityName: "CodeSnippetEntity")
+        request.predicate = NSPredicate(format: "id == %@", snippet.id as CVarArg)
+        
+        do {
+            let entities = try context.fetch(request)
+            if let entity = entities.first {
+                entity.title = snippet.title
+                entity.code = snippet.code
+                entity.language = snippet.language
+                entity.tags = snippet.tags as NSObject
+                
+                try context.save()
+                loadSnippets()
+                
                 alertItem = AlertItem(
-                    title: "Error",
-                    message: "Failed to update snippet: \(error.localizedDescription)",
+                    title: "Success",
+                    message: "Snippet updated successfully",
                     dismissButton: "OK"
                 )
             }
+        } catch {
+            print("Error updating snippet: \(error)")
+            alertItem = AlertItem(
+                title: "Error",
+                message: "Failed to update snippet: \(error.localizedDescription)",
+                dismissButton: "OK"
+            )
         }
+    }
     
-    private func updateEntity(_ entity: CodeSnippetEntity, with snippet: SnippetModel) {
-            entity.id = snippet.id
-            entity.title = snippet.title
-            entity.code = snippet.code
-            entity.language = snippet.language
-            entity.tags = snippet.tags as NSArray
-            entity.dateCreated = snippet.dateCreated
-        }
-        
-        func getAllTags() -> [String] {
-            let request = NSFetchRequest<CodeSnippetEntity>(entityName: "CodeSnippetEntity")
-            
-            do {
-                let entities = try context.fetch(request)
-                let allTags = entities.compactMap { $0.tags as? [String] }.flatMap { $0 }
-                return Array(Set(allTags)).sorted()
-            } catch {
-                return []
-            }
-        }
-    
-    func deleteSnippet(at offsets: IndexSet) {
-        let snippetsToDelete = offsets.map { snippets[$0] }
-        
-        for snippet in snippetsToDelete {
+    func deleteSnippet(at offsets: IndexSet) async {
+        for index in offsets {
+            guard index < snippets.count else { continue }
+            let snippet = snippets[index]
             let request = NSFetchRequest<CodeSnippetEntity>(entityName: "CodeSnippetEntity")
             request.predicate = NSPredicate(format: "id == %@", snippet.id as CVarArg)
             
@@ -134,36 +146,64 @@ class SnippetManagerViewModel: ObservableObject {
                     context.delete(entity)
                 }
             } catch {
+                print("Error deleting snippet: \(error)")
                 alertItem = AlertItem(
                     title: "Error",
                     message: "Failed to delete snippet: \(error.localizedDescription)",
                     dismissButton: "OK"
                 )
+                return
             }
         }
         
-        CoreDataManager.shared.save()
-        loadSnippets()
+        do {
+            try context.save()
+            loadSnippets()
+            alertItem = AlertItem(
+                title: "Success",
+                message: "Snippet deleted successfully",
+                dismissButton: "OK"
+            )
+        } catch {
+            print("Error saving after delete: \(error)")
+            alertItem = AlertItem(
+                title: "Error",
+                message: "Failed to save changes: \(error.localizedDescription)",
+                dismissButton: "OK"
+            )
+        }
     }
     
-    // MARK: - Helper Methods
-    
     func getAllLanguages() -> [String] {
-            let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CodeSnippetEntity")
-            request.propertiesToFetch = ["language"]
-            request.returnsDistinctResults = true
-            request.resultType = .dictionaryResultType
-            
-            do {
-                let results = try context.fetch(request) as? [[String: String]] ?? []
-                return results.compactMap { $0["language"] }.sorted()
-            } catch {
-                return []
-            }
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CodeSnippetEntity")
+        request.propertiesToFetch = ["language"]
+        request.returnsDistinctResults = true
+        request.resultType = .dictionaryResultType
+        
+        do {
+            let results = try context.fetch(request) as? [[String: String]] ?? []
+            return results.compactMap { $0["language"] }.sorted()
+        } catch {
+            print("Error fetching languages: \(error)")
+            return []
         }
+    }
+    
+    func getAllTags() -> [String] {
+        let request = NSFetchRequest<CodeSnippetEntity>(entityName: "CodeSnippetEntity")
+        
+        do {
+            let entities = try context.fetch(request)
+            let allTags = entities.compactMap { $0.tags as? [String] }.flatMap { $0 }
+            return Array(Set(allTags)).sorted()
+        } catch {
+            print("Error fetching tags: \(error)")
+            return []
+        }
+    }
     
     func filterSnippets() {
-        loadSnippets() // This will apply the current filters
+        loadSnippets()
     }
     
     func clearFilters() {

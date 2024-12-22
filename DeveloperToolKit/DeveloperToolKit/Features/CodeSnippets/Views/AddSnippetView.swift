@@ -15,18 +15,13 @@ struct AddSnippetView: View {
     @State private var code = ""
     @State private var language = ""
     @State private var tags = ""
-    @FocusState private var focusedField: Field?
-    
-    enum Field {
-        case title, code, language, tags
-    }
+    @FocusState private var focusedField: FormFieldType?
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: 20) {
-                    // Title Input
-                    InputField(
+            Form {
+                Section(header: Text("Details")) {
+                    AddSnippetInputField(  // Changed from InputField to AddSnippetInputField
                         title: "Title",
                         text: $title,
                         icon: "text.alignleft",
@@ -34,8 +29,7 @@ struct AddSnippetView: View {
                         field: .title
                     )
                     
-                    // Language Input
-                    InputField(
+                    AddSnippetInputField(  // Changed here too
                         title: "Language",
                         text: $language,
                         icon: "chevron.left.forwardslash.chevron.right",
@@ -43,39 +37,22 @@ struct AddSnippetView: View {
                         field: .language
                     )
                     
-                    // Tags Input
-                    InputField(
+                    AddSnippetInputField(  // And here
                         title: "Tags (comma separated)",
                         text: $tags,
                         icon: "tag",
                         focused: $focusedField,
                         field: .tags
                     )
-                    
-                    // Code Input
-                    VStack(alignment: .leading, spacing: 8) {
-                        Label("Code", systemImage: "doc.text")
-                            .font(.headline)
-                            .foregroundColor(Theme.text)
-                        
-                        TextEditor(text: $code)
-                            .font(.system(.body, design: .monospaced))
-                            .frame(height: 200)
-                            .padding(8)
-                            .background(Color.white)
-                            .cornerRadius(12)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Theme.border, lineWidth: 1)
-                            )
-                            .focused($focusedField, equals: .code)
-                    }
                 }
-                .padding()
+                
+                Section(header: Text("Code")) {
+                    TextEditor(text: $code)
+                        .focused($focusedField, equals: .code)
+                        .frame(minHeight: 200)
+                }
             }
-            .background(Theme.background)
             .navigationTitle("Add Snippet")
-            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
@@ -111,12 +88,12 @@ struct AddSnippetView: View {
     }
 }
 
-struct InputField: View {
+struct AddSnippetInputField: View {  // Renamed from InputField to AddSnippetInputField
     let title: String
     let text: Binding<String>
     let icon: String
-    let focused: FocusState<AddSnippetView.Field?>.Binding
-    let field: AddSnippetView.Field
+    let focused: FocusState<FormFieldType?>.Binding
+    let field: FormFieldType
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -130,3 +107,11 @@ struct InputField: View {
         }
     }
 }
+
+#if DEBUG
+struct AddSnippetView_Previews: PreviewProvider {
+    static var previews: some View {
+        AddSnippetView(viewModel: SnippetManagerViewModel())
+    }
+}
+#endif

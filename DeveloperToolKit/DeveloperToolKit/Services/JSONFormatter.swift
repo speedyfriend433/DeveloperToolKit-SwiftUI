@@ -7,19 +7,40 @@
 
 import Foundation
 
-class JSONFormatter {
-    static func format(_ json: String) throws -> String {
+enum JSONFormatter {
+    static func format(_ json: String, options: JSONFormatterOptions) throws -> String {
         guard let data = json.data(using: .utf8) else {
             throw JSONError.invalidInput
         }
         
         let object = try JSONSerialization.jsonObject(with: data, options: [])
+        var writingOptions: JSONSerialization.WritingOptions = [.prettyPrinted]
+        
+        if options.sortKeys {
+            writingOptions.insert(.sortedKeys)
+        }
+        if options.escapeSlashes {
+            writingOptions.insert(.withoutEscapingSlashes)
+        }
+        
         let prettyData = try JSONSerialization.data(
             withJSONObject: object,
-            options: [.prettyPrinted]
+            options: writingOptions
         )
         
-        return String(data: prettyData, encoding: .utf8) ?? ""
+        var prettyString = String(data: prettyData, encoding: .utf8) ?? ""
+        
+        // Apply custom indentation
+        if options.indentationSpaces != 2 {
+            let defaultIndentation = String(repeating: " ", count: 2)
+            let customIndentation = String(repeating: " ", count: options.indentationSpaces)
+            prettyString = prettyString.replacingOccurrences(
+                of: defaultIndentation,
+                with: customIndentation
+            )
+        }
+        
+        return prettyString
     }
     
     static func minify(_ json: String) throws -> String {

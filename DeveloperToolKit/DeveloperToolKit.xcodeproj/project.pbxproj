@@ -44,6 +44,10 @@
 		8E3B2E082D17C0AE00113550 /* ArrayTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */; };
 		8E3B2E0C2D17D77300113550 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0B2D17D77300113550 /* Theme.swift */; };
 		8E3B2E0E2D17E37F00113550 /* SamplePatternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */; };
+		8E9559412D183B1300BCF6A7 /* DetailInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559402D183B1300BCF6A7 /* DetailInputField.swift */; };
+		8E9559432D183B3300BCF6A7 /* FormFieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559422D183B3300BCF6A7 /* FormFieldType.swift */; };
+		8E9559452D18495B00BCF6A7 /* JSONFormatterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559442D18495B00BCF6A7 /* JSONFormatterOptions.swift */; };
+		8E9559472D184A1F00BCF6A7 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559462D184A1F00BCF6A7 /* ActionButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +108,10 @@
 		8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTransformer.swift; sourceTree = "<group>"; };
 		8E3B2E0B2D17D77300113550 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePatternModel.swift; sourceTree = "<group>"; };
+		8E9559402D183B1300BCF6A7 /* DetailInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInputField.swift; sourceTree = "<group>"; };
+		8E9559422D183B3300BCF6A7 /* FormFieldType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldType.swift; sourceTree = "<group>"; };
+		8E9559442D18495B00BCF6A7 /* JSONFormatterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFormatterOptions.swift; sourceTree = "<group>"; };
+		8E9559462D184A1F00BCF6A7 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -222,6 +230,7 @@
 				8E3B2DF72D17B5B800113550 /* APIResponse.swift */,
 				8E3B2DF92D17B5CE00113550 /* AlertItem.swift */,
 				8E3B2E052D17BF3800113550 /* SnippetModel.swift */,
+				8E9559422D183B3300BCF6A7 /* FormFieldType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -303,6 +312,7 @@
 			isa = PBXGroup;
 			children = (
 				8E28E3302D17244000C23C1D /* JSONFormatterView.swift */,
+				8E9559442D18495B00BCF6A7 /* JSONFormatterOptions.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -318,6 +328,7 @@
 		8E28E33D2D17266D00C23C1D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8E95593F2D183B0A00BCF6A7 /* Components */,
 				8E28E33E2D17267100C23C1D /* ResponseView.swift */,
 				8E28E3402D17268200C23C1D /* HeaderRowView.swift */,
 			);
@@ -349,6 +360,7 @@
 				8E28E3562D1727C400C23C1D /* SnippetDetailView.swift */,
 				8E28E34F2D17274F00C23C1D /* SnippetRowView.swift */,
 				8E28E3542D17277B00C23C1D /* AddSnippetView.swift */,
+				8E9559462D184A1F00BCF6A7 /* ActionButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -359,6 +371,14 @@
 				8E28E3522D17276900C23C1D /* SnippetManagerViewModel.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		8E95593F2D183B0A00BCF6A7 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				8E9559402D183B1300BCF6A7 /* DetailInputField.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -496,6 +516,8 @@
 				8E28E3412D17268200C23C1D /* HeaderRowView.swift in Sources */,
 				8E28E3342D17245D00C23C1D /* JSONFormatterViewModel.swift in Sources */,
 				8E3B2E0E2D17E37F00113550 /* SamplePatternModel.swift in Sources */,
+				8E9559452D18495B00BCF6A7 /* JSONFormatterOptions.swift in Sources */,
+				8E9559432D183B3300BCF6A7 /* FormFieldType.swift in Sources */,
 				8E28E34B2D17272300C23C1D /* RegexOptions.swift in Sources */,
 				8E28E3502D17274F00C23C1D /* SnippetRowView.swift in Sources */,
 				8E3B2DF22D17B4BC00113550 /* KeyboardToolbar.swift in Sources */,
@@ -512,12 +534,14 @@
 				8E28E3382D17248600C23C1D /* NetworkService.swift in Sources */,
 				8E28E3552D17277B00C23C1D /* AddSnippetView.swift in Sources */,
 				8E3B2DF62D17B5A400113550 /* Header.swift in Sources */,
+				8E9559472D184A1F00BCF6A7 /* ActionButton.swift in Sources */,
 				8E28E3312D17244000C23C1D /* JSONFormatterView.swift in Sources */,
 				8E28E2EE2D1720AF00C23C1D /* ContentView.swift in Sources */,
 				8E28E3292D1722CC00C23C1D /* APITesterView.swift in Sources */,
 				8E28E2EC2D1720AF00C23C1D /* DeveloperToolKitApp.swift in Sources */,
 				8E3B2E062D17BF3800113550 /* SnippetModel.swift in Sources */,
 				8E3B2DF42D17B56600113550 /* HTTPMethod.swift in Sources */,
+				8E9559412D183B1300BCF6A7 /* DetailInputField.swift in Sources */,
 				8E28E3572D1727C400C23C1D /* SnippetDetailView.swift in Sources */,
 				8E3B2E042D17BC4C00113550 /* CoreDataManager.swift in Sources */,
 				8E3B2E022D17BBFA00113550 /* CodeSnippet.xcdatamodeld in Sources */,
