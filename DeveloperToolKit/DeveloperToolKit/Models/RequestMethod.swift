@@ -1,13 +1,13 @@
 //
-//  HTTPMethod.swift
+//  RequestMethod.swift
 //  DeveloperToolKit
 //
-//  Created by speedy on 2024/12/22.
+//  Created by speedy on 2024/12/23.
 //
 
-/*import Foundation
+import Foundation
 
-enum RequestMethod: String, CaseIterable, Identifiable {
+enum RequestMethod: String, CaseIterable, Identifiable, Codable {
     case get = "GET"
     case post = "POST"
     case put = "PUT"
@@ -15,4 +15,3 @@ enum RequestMethod: String, CaseIterable, Identifiable {
     
     var id: String { self.rawValue }
 }
-*/

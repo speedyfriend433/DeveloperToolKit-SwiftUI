@@ -10,27 +10,30 @@ import CoreData
 class CoreDataManager {
     static let shared = CoreDataManager()
     
-    private let container: NSPersistentContainer
+    private let persistentContainer: NSPersistentContainer
     
     private init() {
-        container = NSPersistentContainer(name: "CodeSnippet")
-        container.loadPersistentStores { description, error in
+        // Register the transformer
+        StringArrayTransformer.register()
+        
+        persistentContainer = NSPersistentContainer(name: "CodeSnippet")
+        persistentContainer.loadPersistentStores { description, error in
             if let error = error {
                 print("Core Data failed to load: \(error.localizedDescription)")
             }
         }
         
         // Configure automatic merge policy
-        container.viewContext.automaticallyMergesChangesFromParent = true
-        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
+        persistentContainer.viewContext.automaticallyMergesChangesFromParent = true
+        persistentContainer.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
     }
     
     var viewContext: NSManagedObjectContext {
-        container.viewContext
+        persistentContainer.viewContext
     }
     
     func save() {
-        let context = container.viewContext
+        let context = persistentContainer.viewContext
         if context.hasChanges {
             do {
                 try context.save()

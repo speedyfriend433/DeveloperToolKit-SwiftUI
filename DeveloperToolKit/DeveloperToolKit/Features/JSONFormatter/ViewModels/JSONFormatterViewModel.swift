@@ -6,17 +6,16 @@
 //
 
 import SwiftUI
+import Combine
 
 @MainActor
 class JSONFormatterViewModel: ObservableObject {
     @Published var inputJSON: String = ""
     @Published var formattedJSON: String = ""
     @Published var alertItem: AlertItem?
-    @Published var hasError: Bool = false
-    @Published var errorMessage: String = ""
     @Published var options: JSONFormatterOptions = JSONFormatterOptions()
     
-    func formatJSON() {
+    func formatJSON() async {
         guard !inputJSON.isEmpty else {
             showError("Please enter JSON to format")
             return
@@ -24,14 +23,12 @@ class JSONFormatterViewModel: ObservableObject {
         
         do {
             formattedJSON = try JSONFormatter.format(inputJSON, options: options)
-            hasError = false
-            errorMessage = ""
         } catch {
             showError("Invalid JSON: \(error.localizedDescription)")
         }
     }
     
-    func minifyJSON() {
+    func minifyJSON() async {
         guard !inputJSON.isEmpty else {
             showError("Please enter JSON to minify")
             return
@@ -39,14 +36,12 @@ class JSONFormatterViewModel: ObservableObject {
         
         do {
             formattedJSON = try JSONFormatter.minify(inputJSON)
-            hasError = false
-            errorMessage = ""
         } catch {
             showError("Invalid JSON: \(error.localizedDescription)")
         }
     }
     
-    func copyToClipboard() {
+    func copyToClipboard() async {
         guard !formattedJSON.isEmpty else {
             showError("No formatted JSON to copy")
             return
@@ -60,27 +55,13 @@ class JSONFormatterViewModel: ObservableObject {
         )
     }
     
-    func clearInput() {
+    func clearAll() async {
         inputJSON = ""
         formattedJSON = ""
-        hasError = false
-        errorMessage = ""
-    }
-    
-    func clearAll() {
-        clearInput()
         options = JSONFormatterOptions()
     }
     
-    func pasteFromClipboard() {
-        if let string = UIPasteboard.general.string {
-            inputJSON = string
-        }
-    }
-    
     private func showError(_ message: String) {
-        hasError = true
-        errorMessage = message
         alertItem = AlertItem(
             title: "Error",
             message: message,

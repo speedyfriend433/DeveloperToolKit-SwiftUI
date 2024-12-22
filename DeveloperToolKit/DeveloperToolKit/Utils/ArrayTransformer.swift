@@ -8,22 +8,15 @@
 import Foundation
 
 @objc(StringArrayTransformer)
-class StringArrayTransformer: ValueTransformer {
-    override class func transformedValueClass() -> AnyClass {
-        return NSArray.self
+class StringArrayTransformer: NSSecureUnarchiveFromDataTransformer {
+    static let name = NSValueTransformerName(rawValue: "StringArrayTransformer")
+    
+    override static var allowedTopLevelClasses: [AnyClass] {
+        return [NSArray.self, NSString.self]
     }
     
-    override class func allowsReverseTransformation() -> Bool {
-        return true
-    }
-    
-    override func transformedValue(_ value: Any?) -> Any? {
-        guard let array = value as? [String] else { return nil }
-        return try? NSKeyedArchiver.archivedData(withRootObject: array, requiringSecureCoding: true)
-    }
-    
-    override func reverseTransformedValue(_ value: Any?) -> Any? {
-        guard let data = value as? Data else { return nil }
-        return try? NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: data) as? [String]
+    static func register() {
+        let transformer = StringArrayTransformer()
+        ValueTransformer.setValueTransformer(transformer, forName: name)
     }
 }

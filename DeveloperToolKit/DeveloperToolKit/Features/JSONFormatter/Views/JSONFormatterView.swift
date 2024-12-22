@@ -9,13 +9,9 @@ import SwiftUI
 
 struct JSONFormatterView: View {
     @StateObject private var viewModel = JSONFormatterViewModel()
-    @FocusState private var focusedField: Field?
+    @FocusState private var focusedField: FormatterField?
     @State private var showOptions = false
     @State private var showSamples = false
-    
-    enum Field {
-        case input, output
-    }
     
     var body: some View {
         NavigationView {
@@ -32,16 +28,10 @@ struct JSONFormatterView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
-                        Button(action: { showOptions = true }) {
+                        Button {
+                            showOptions = true
+                        } label: {
                             Label("Formatting Options", systemImage: "gear")
-                        }
-                        
-                        Button(action: { showSamples = true }) {
-                            Label("Sample JSON", systemImage: "doc.text")
-                        }
-                        
-                        Button(action: viewModel.clearAll) {
-                            Label("Clear All", systemImage: "trash")
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
@@ -49,10 +39,7 @@ struct JSONFormatterView: View {
                 }
             }
             .sheet(isPresented: $showOptions) {
-                FormattingOptionsView(options: $viewModel.options)
-            }
-            .sheet(isPresented: $showSamples) {
-                JSONSamplesView(viewModel: viewModel)
+                FormatterOptionsView(options: $viewModel.options)
             }
             .alert(item: $viewModel.alertItem) { alertItem in
                 Alert(
@@ -65,28 +52,6 @@ struct JSONFormatterView: View {
         }
     }
     
-    private var toolbarSection: some View {
-            HStack(spacing: 16) {
-                ActionButton(
-                    title: "Format",
-                    icon: "arrow.right.circle.fill",
-                    action: viewModel.formatJSON
-                )
-                
-                ActionButton(
-                    title: "Minify",
-                    icon: "arrow.left.circle.fill",
-                    action: viewModel.minifyJSON
-                )
-                
-                ActionButton(
-                    title: "Copy",
-                    icon: "doc.on.doc.fill",
-                    action: viewModel.copyToClipboard
-                )
-            }
-        }
-    
     private var inputSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -96,45 +61,38 @@ struct JSONFormatterView: View {
                 
                 Spacer()
                 
-                if !viewModel.inputJSON.isEmpty {
-                    Button(action: viewModel.clearInput) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(Theme.text.opacity(0.5))
-                    }
+                Button(action: { viewModel.inputJSON = "" }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(Theme.text.opacity(0.5))
                 }
+                .opacity(viewModel.inputJSON.isEmpty ? 0 : 1)
             }
             
-            JSONInputEditor(
-                text: $viewModel.inputJSON,
-                isError: viewModel.hasError,
-                focused: $focusedField,
-                field: .input
-            )
-            
-            if viewModel.hasError {
-                Text(viewModel.errorMessage)
-                    .font(.caption)
-                    .foregroundColor(Theme.error)
-            }
-            
-            HStack {
-                Text("\(viewModel.inputJSON.count) characters")
-                    .font(.caption)
-                    .foregroundColor(Theme.text.opacity(0.5))
-                
-                Spacer()
-                
-                Button("Paste") {
-                    viewModel.pasteFromClipboard()
-                }
-                .font(.caption)
-                .foregroundColor(Theme.primary)
+            TextEditor(text: $viewModel.inputJSON)
+                .frame(height: 200)
+                .font(.system(.body, design: .monospaced))
+                .focused($focusedField, equals: .input)
+                .scrollContentBackground(.hidden)
+                .padding(8)
+                .background(Color.white)
+                .cornerRadius(12)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Theme.border, lineWidth: 1)
+                )
+        }
+    }
+    
+    private var toolbarSection: some View {
+        HStack(spacing: 16) {
+            ForEach([
+                ("Format", "arrow.right.circle.fill", viewModel.formatJSON),
+                ("Minify", "arrow.left.circle.fill", viewModel.minifyJSON),
+                ("Copy", "doc.on.doc.fill", viewModel.copyToClipboard)
+            ], id: \.0) { title, icon, action in
+                FormatterButton(title: title, icon: icon, action: action)
             }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
     }
     
     private var outputSection: some View {
@@ -156,13 +114,19 @@ struct JSONFormatterView: View {
             if viewModel.formattedJSON.isEmpty {
                 emptyStateView
             } else {
-                JSONSyntaxHighlightedView(json: viewModel.formattedJSON)
+                TextEditor(text: .constant(viewModel.formattedJSON))
+                    .frame(height: 200)
+                    .font(.system(.body, design: .monospaced))
+                    .scrollContentBackground(.hidden)
+                    .padding(8)
+                    .background(Color.white)
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Theme.border, lineWidth: 1)
+                    )
             }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 4)
     }
     
     private var emptyStateView: some View {
@@ -186,48 +150,46 @@ struct JSONFormatterView: View {
     }
 }
 
-// Supporting Views
-struct JSONInputEditor: View {
-    @Binding var text: String
-    let isError: Bool
-    let focused: FocusState<JSONFormatterView.Field?>.Binding
-    let field: JSONFormatterView.Field
+struct FormatterButton: View {
+    let title: String
+    let icon: String
+    let action: () async -> Void
     
     var body: some View {
-        TextEditor(text: $text)
-            .frame(height: 200)
-            .font(.system(.body, design: .monospaced))
-            .focused(focused, equals: field)
-            .scrollContentBackground(.hidden)
-            .padding(8)
-            .background(Color.white)
-            .cornerRadius(12)
-            .overlay(
+        Button {
+            Task {
+                await action()
+            }
+        } label: {
+            VStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.system(size: 24))
+                Text(title)
+                    .font(.system(.callout, design: .rounded, weight: .medium))
+            }
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 12)
+            .background(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isError ? Theme.error : Theme.border, lineWidth: 1)
+                    .fill(Theme.primary)
+                    .shadow(color: Theme.primary.opacity(0.3), radius: 5, x: 0, y: 2)
             )
+        }
     }
 }
 
-struct JSONSyntaxHighlightedView: View {
-    let json: String
-    @State private var showLineNumbers = true
+#Preview {
+    JSONFormatterView()
+}
+
+#Preview {
+    JSONFormatterView()
+}
+
+// Supporting Views
     
-    var body: some View {
-        ScrollView([.horizontal, .vertical]) {
-            HStack(alignment: .top, spacing: 0) {
-                if showLineNumbers {
-                    lineNumbers
-                }
-                
-                highlightedText
-            }
-        }
-        .frame(height: 200)
-        .font(.system(.body, design: .monospaced))
-    }
-    
-    private var lineNumbers: some View {
+    /*private var lineNumbers: some View {
         let lines = json.components(separatedBy: .newlines)
         return VStack(alignment: .trailing, spacing: 0) {
             ForEach(0..<lines.count, id: \.self) { index in
@@ -245,36 +207,6 @@ struct JSONSyntaxHighlightedView: View {
             .padding(8)
             .textSelection(.enabled)
     }
-}
-
-struct FormattingOptionsView: View {
-    @Environment(\.dismiss) private var dismiss
-    @Binding var options: JSONFormatterOptions
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section(header: Text("Formatting")) {
-                    Stepper("Indentation: \(options.indentationSpaces) spaces",
-                           value: $options.indentationSpaces, in: 1...8)
-                    
-                    Toggle("Sort Keys", isOn: $options.sortKeys)
-                    Toggle("Escape Slashes", isOn: $options.escapeSlashes)
-                    Toggle("Escape Unicode", isOn: $options.escapeUnicode)
-                }
-            }
-            .navigationTitle("Formatting Options")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
-                    }
-                }
-            }
-        }
-    }
-}
 
 struct JSONSamplesView: View {
     @Environment(\.dismiss) private var dismiss
@@ -307,7 +239,7 @@ struct JSONSamplesView: View {
             }
         }
     }
-}
+}*/
 
 // MARK: - Sample JSON
 enum JSONSample: CaseIterable, Identifiable {
