@@ -9,6 +9,11 @@ import SwiftUI
 
 struct APITesterView: View {
     @StateObject private var viewModel = APITesterViewModel()
+    @FocusState private var focusedField: Field?
+    
+    enum Field {
+        case url, requestBody
+    }
     
     var body: some View {
         NavigationView {
@@ -18,7 +23,10 @@ struct APITesterView: View {
                     urlInput
                     headerSection
                     requestBodySection
-                    responseSection
+                    
+                    if let response = viewModel.response {
+                        ResponseView(response: response)
+                    }
                     
                     sendButton
                 }
@@ -40,12 +48,13 @@ struct APITesterView: View {
                         .background(Color.black.opacity(0.2))
                 }
             }
+            .addKeyboardToolbar()
         }
     }
     
     private var methodSelector: some View {
         Picker("Method", selection: $viewModel.selectedMethod) {
-            ForEach(HTTPMethod.allCases) { method in
+            ForEach(RequestMethod.allCases) { method in
                 Text(method.rawValue).tag(method)
             }
         }
@@ -55,6 +64,9 @@ struct APITesterView: View {
     private var urlInput: some View {
         TextField("Enter URL", text: $viewModel.url)
             .textFieldStyle(.roundedBorder)
+            .focused($focusedField, equals: .url)
+            .autocapitalization(.none)
+            .autocorrectionDisabled()
     }
     
     private var headerSection: some View {
@@ -66,12 +78,18 @@ struct APITesterView: View {
                 HeaderRowView(
                     header: $viewModel.headers[index],
                     onDelete: {
-                        viewModel.removeHeader(at: index)
+                        Task {
+                            await viewModel.removeHeader(at: index)
+                        }
                     }
                 )
             }
             
-            Button(action: viewModel.addHeader) {
+            Button(action: {
+                Task {
+                    await viewModel.addHeader()
+                }
+            }) {
                 HStack {
                     Image(systemName: "plus.circle.fill")
                     Text("Add Header")
@@ -80,7 +98,6 @@ struct APITesterView: View {
             }
         }
     }
-
     
     private var requestBodySection: some View {
         VStack(alignment: .leading) {
@@ -89,21 +106,9 @@ struct APITesterView: View {
             
             TextEditor(text: $viewModel.requestBody)
                 .frame(height: 150)
+                .focused($focusedField, equals: .requestBody)
                 .border(Color.gray, width: 1)
-        }
-    }
-    
-    private var responseSection: some View {
-        VStack(alignment: .leading) {
-            Text("Response")
-                .font(.headline)
-            
-            if let response = viewModel.response {
-                ResponseView(response: response)
-            } else {
-                Text("No response yet")
-                    .foregroundColor(.gray)
-            }
+                .font(.system(.body, design: .monospaced))
         }
     }
     
@@ -115,4 +120,8 @@ struct APITesterView: View {
         }
         .buttonStyle(.borderedProminent)
     }
+}
+
+#Preview {
+    APITesterView()
 }

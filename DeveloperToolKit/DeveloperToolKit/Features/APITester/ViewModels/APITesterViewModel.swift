@@ -9,7 +9,7 @@ import Foundation
 
 @MainActor
 class APITesterViewModel: ObservableObject {
-    @Published var selectedMethod: HTTPMethod = .get
+    @Published var selectedMethod: RequestMethod = .get // Changed from HTTPMethod to RequestMethod
     @Published var url: String = ""
     @Published var headers: [Header] = []
     @Published var requestBody: String = ""
@@ -17,11 +17,11 @@ class APITesterViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var alertItem: AlertItem?
     
-    func addHeader() {
+    func addHeader() async {
         headers.append(Header(key: "", value: ""))
     }
     
-    func removeHeader(at index: Int) {
+    func removeHeader(at index: Int) async {
         headers.remove(at: index)
     }
     
@@ -45,7 +45,11 @@ class APITesterViewModel: ObservableObject {
                 body: requestBody
             )
         } catch {
-            alertItem = AlertItem.error(error)
+            alertItem = AlertItem(
+                title: "Error",
+                message: error.localizedDescription,
+                dismissButton: "OK"
+            )
         }
         
         isLoading = false

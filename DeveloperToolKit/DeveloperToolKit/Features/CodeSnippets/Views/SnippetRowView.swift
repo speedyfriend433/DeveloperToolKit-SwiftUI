@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SnippetRowView: View {
-    let snippet: CodeSnippet
+    let snippet: SnippetModel
     
     var body: some View {
         VStack(alignment: .leading) {

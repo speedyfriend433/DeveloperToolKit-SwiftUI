@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// RegexOptionsView
 struct RegexOptionsView: View {
     @Binding var options: RegexOptions
     

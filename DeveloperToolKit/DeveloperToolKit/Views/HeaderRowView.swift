@@ -10,6 +10,11 @@ import SwiftUI
 struct HeaderRowView: View {
     @Binding var header: Header
     let onDelete: () -> Void
+    @FocusState private var focusedField: Field?
+    
+    enum Field {
+        case key, value
+    }
     
     var body: some View {
         HStack {
@@ -18,6 +23,9 @@ struct HeaderRowView: View {
                 set: { header.key = $0 }
             ))
             .textFieldStyle(.roundedBorder)
+            .focused($focusedField, equals: .key)
+            .autocapitalization(.none)
+            .autocorrectionDisabled()
             
             Text(":")
             
@@ -26,6 +34,9 @@ struct HeaderRowView: View {
                 set: { header.value = $0 }
             ))
             .textFieldStyle(.roundedBorder)
+            .focused($focusedField, equals: .value)
+            .autocapitalization(.none)
+            .autocorrectionDisabled()
             
             Button(action: onDelete) {
                 Image(systemName: "minus.circle.fill")

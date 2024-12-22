@@ -12,28 +12,83 @@ struct ResponseView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Status: \(response.statusCode)")
-                .font(.subheadline)
+            Text("Response")
+                .font(.headline)
             
-            Text("Response Time: \(String(format: "%.2f", response.responseTime))s")
-                .font(.subheadline)
-            
-            Text("Headers:")
-                .font(.subheadline)
-            
-            ForEach(Array(response.headers.keys), id: \.self) { key in
-                Text("\(key): \(response.headers[key] ?? "")")
-                    .font(.caption)
+            Group {
+                statusView
+                responseTimeView
+                headersView
+                bodyView
             }
+            .font(.system(.body, design: .monospaced))
+        }
+    }
+    
+    private var statusView: some View {
+        HStack {
+            Text("Status:")
+            Text("\(response.statusCode)")
+                .foregroundColor(statusColor)
+        }
+    }
+    
+    private var responseTimeView: some View {
+        HStack {
+            Text("Time:")
+            Text(String(format: "%.2f s", response.responseTime))
+        }
+    }
+    
+    private var headersView: some View {
+        VStack(alignment: .leading) {
+            Text("Headers:")
             
+            ForEach(Array(response.headers.keys.sorted()), id: \.self) { key in
+                if let value = response.headers[key] {
+                    Text("\(key): \(value)")
+                        .padding(.leading)
+                }
+            }
+        }
+    }
+    
+    private var bodyView: some View {
+        VStack(alignment: .leading) {
             Text("Body:")
-                .font(.subheadline)
             
             ScrollView {
-                Text(response.body)
-                    .font(.system(.body, design: .monospaced))
+                Text(formattedBody)
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(maxHeight: 200)
+            .frame(maxHeight: 300)
+            .border(Color.gray, width: 1)
         }
+    }
+
+    private var statusColor: Color {
+        switch response.statusCode {
+        case 200...299:
+            return .green
+        case 300...399:
+            return .blue
+        case 400...499:
+            return .orange
+        case 500...599:
+            return .red
+        default:
+            return .primary
+        }
+    }
+    
+    private var formattedBody: String {
+        if let data = response.body.data(using: .utf8),
+           let json = try? JSONSerialization.jsonObject(with: data),
+           let prettyData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+           let prettyString = String(data: prettyData, encoding: .utf8) {
+            return prettyString
+        }
+        return response.body
     }
 }

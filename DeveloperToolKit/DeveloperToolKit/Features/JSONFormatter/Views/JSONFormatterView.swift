@@ -9,6 +9,11 @@ import SwiftUI
 
 struct JSONFormatterView: View {
     @StateObject private var viewModel = JSONFormatterViewModel()
+    @FocusState private var focusedField: Field?
+    
+    enum Field {
+        case input, output
+    }
     
     var body: some View {
         NavigationView {
@@ -19,6 +24,7 @@ struct JSONFormatterView: View {
                     TextEditor(text: $viewModel.inputJSON)
                         .font(.system(.body, design: .monospaced))
                         .frame(height: UIScreen.main.bounds.height * 0.3)
+                        .focused($focusedField, equals: .input)
                         .border(Color.gray, width: 1)
                 }
                 
@@ -28,6 +34,7 @@ struct JSONFormatterView: View {
                     TextEditor(text: .constant(viewModel.formattedJSON))
                         .font(.system(.body, design: .monospaced))
                         .frame(height: UIScreen.main.bounds.height * 0.3)
+                        .focused($focusedField, equals: .output)
                         .border(Color.gray, width: 1)
                 }
                 
@@ -50,6 +57,7 @@ struct JSONFormatterView: View {
             }
             .padding()
             .navigationTitle("JSON Formatter")
+            .addKeyboardToolbar()
         }
     }
 }

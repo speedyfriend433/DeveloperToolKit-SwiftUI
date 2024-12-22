@@ -7,13 +7,6 @@
 
 import Foundation
 
-struct AlertItem: Identifiable {
-    let id = UUID()
-    let title: String
-    let message: String
-    let dismissButton: String
-}
-
 extension AlertItem {
     static func error(_ error: Error) -> AlertItem {
         AlertItem(

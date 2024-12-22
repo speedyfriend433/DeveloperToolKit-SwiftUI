@@ -15,7 +15,7 @@ class RegexViewModel: ObservableObject {
     @Published var matches: [String] = []
     @Published var alertItem: AlertItem?
     
-    func performMatch() {
+    func performMatch() async {
         guard !pattern.isEmpty else {
             alertItem = AlertItem(
                 title: "Error",
@@ -29,7 +29,11 @@ class RegexViewModel: ObservableObject {
             let regex = try createRegex()
             matches = findMatches(with: regex)
         } catch {
-            alertItem = AlertItem.error(error)
+            alertItem = AlertItem(
+                title: "Error",
+                message: error.localizedDescription,
+                dismissButton: "OK"
+            )
             matches = []
         }
     }

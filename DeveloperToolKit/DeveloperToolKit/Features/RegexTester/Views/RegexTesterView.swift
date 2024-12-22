@@ -9,6 +9,11 @@ import SwiftUI
 
 struct RegexTesterView: View {
     @StateObject private var viewModel = RegexViewModel()
+    @FocusState private var focusedField: Field?
+    
+    enum Field {
+        case pattern, testString
+    }
     
     var body: some View {
         NavigationView {
@@ -20,6 +25,9 @@ struct RegexTesterView: View {
                             .font(.headline)
                         TextField("Enter pattern", text: $viewModel.pattern)
                             .textFieldStyle(.roundedBorder)
+                            .focused($focusedField, equals: .pattern)
+                            .autocapitalization(.none)
+                            .autocorrectionDisabled()
                     }
                     
                     // Test String Input
@@ -28,6 +36,7 @@ struct RegexTesterView: View {
                             .font(.headline)
                         TextEditor(text: $viewModel.testString)
                             .frame(height: 100)
+                            .focused($focusedField, equals: .testString)
                             .border(Color.gray, width: 1)
                     }
                     
@@ -36,11 +45,13 @@ struct RegexTesterView: View {
                     
                     // Test Button
                     Button("Test Regex") {
-                        viewModel.performMatch()
+                        Task {
+                            await viewModel.performMatch()
+                        }
                     }
                     .buttonStyle(.borderedProminent)
                     
-                    // Matches
+                    // Matches Display
                     VStack(alignment: .leading) {
                         Text("Matches")
                             .font(.headline)
@@ -66,6 +77,12 @@ struct RegexTesterView: View {
                     dismissButton: .default(Text(alertItem.dismissButton))
                 )
             }
+            .addKeyboardToolbar() // Only add keyboard toolbar here at the root level
         }
     }
 }
+
+// Preview
+/*#Preview {
+    RegexTesterView()
+}*/
