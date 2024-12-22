@@ -17,30 +17,29 @@ struct HeaderRowView: View {
     }
     
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
             TextField("Key", text: Binding(
                 get: { header.key },
                 set: { header.key = $0 }
             ))
-            .textFieldStyle(.roundedBorder)
+            .textFieldStyle(ModernTextFieldStyle())
             .focused($focusedField, equals: .key)
             .autocapitalization(.none)
             .autocorrectionDisabled()
-            
-            Text(":")
             
             TextField("Value", text: Binding(
                 get: { header.value },
                 set: { header.value = $0 }
             ))
-            .textFieldStyle(.roundedBorder)
+            .textFieldStyle(ModernTextFieldStyle())
             .focused($focusedField, equals: .value)
             .autocapitalization(.none)
             .autocorrectionDisabled()
             
             Button(action: onDelete) {
                 Image(systemName: "minus.circle.fill")
-                    .foregroundColor(.red)
+                    .foregroundColor(Theme.error)
+                    .font(.title2)
             }
         }
     }

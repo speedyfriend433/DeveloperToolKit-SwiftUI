@@ -42,6 +42,8 @@
 		8E3B2E042D17BC4C00113550 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E032D17BC4C00113550 /* CoreDataManager.swift */; };
 		8E3B2E062D17BF3800113550 /* SnippetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E052D17BF3800113550 /* SnippetModel.swift */; };
 		8E3B2E082D17C0AE00113550 /* ArrayTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */; };
+		8E3B2E0C2D17D77300113550 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0B2D17D77300113550 /* Theme.swift */; };
+		8E3B2E0E2D17E37F00113550 /* SamplePatternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -100,6 +102,8 @@
 		8E3B2E032D17BC4C00113550 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		8E3B2E052D17BF3800113550 /* SnippetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetModel.swift; sourceTree = "<group>"; };
 		8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTransformer.swift; sourceTree = "<group>"; };
+		8E3B2E0B2D17D77300113550 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePatternModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,6 +242,7 @@
 				8E28E33B2D17261400C23C1D /* AlertManager.swift */,
 				8E3B2DF12D17B4BC00113550 /* KeyboardToolbar.swift */,
 				8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */,
+				8E3B2E0B2D17D77300113550 /* Theme.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -332,6 +337,7 @@
 			isa = PBXGroup;
 			children = (
 				8E28E3482D17271200C23C1D /* RegexViewModel.swift */,
+				8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -489,6 +495,7 @@
 				8E28E33F2D17267100C23C1D /* ResponseView.swift in Sources */,
 				8E28E3412D17268200C23C1D /* HeaderRowView.swift in Sources */,
 				8E28E3342D17245D00C23C1D /* JSONFormatterViewModel.swift in Sources */,
+				8E3B2E0E2D17E37F00113550 /* SamplePatternModel.swift in Sources */,
 				8E28E34B2D17272300C23C1D /* RegexOptions.swift in Sources */,
 				8E28E3502D17274F00C23C1D /* SnippetRowView.swift in Sources */,
 				8E3B2DF22D17B4BC00113550 /* KeyboardToolbar.swift in Sources */,
@@ -501,6 +508,7 @@
 				8E28E33A2D17249A00C23C1D /* JSONFormatter.swift in Sources */,
 				8E28E3442D1726E300C23C1D /* RegexTesterView.swift in Sources */,
 				8E28E3462D1726F800C23C1D /* RegexOptionsView.swift in Sources */,
+				8E3B2E0C2D17D77300113550 /* Theme.swift in Sources */,
 				8E28E3382D17248600C23C1D /* NetworkService.swift in Sources */,
 				8E28E3552D17277B00C23C1D /* AddSnippetView.swift in Sources */,
 				8E3B2DF62D17B5A400113550 /* Header.swift in Sources */,

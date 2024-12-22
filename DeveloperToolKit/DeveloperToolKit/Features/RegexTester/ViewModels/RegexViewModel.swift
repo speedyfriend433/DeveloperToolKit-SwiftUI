@@ -11,9 +11,15 @@ import Foundation
 class RegexViewModel: ObservableObject {
     @Published var pattern: String = ""
     @Published var testString: String = ""
-    @Published var options: RegexOptions = RegexOptions()
     @Published var matches: [String] = []
     @Published var alertItem: AlertItem?
+    @Published var options = RegexOptions()
+    
+    struct RegexOptions {
+        var caseInsensitive: Bool = false
+        var multiline: Bool = false
+        var dotMatchesAll: Bool = false
+    }
     
     func performMatch() async {
         guard !pattern.isEmpty else {
@@ -39,19 +45,19 @@ class RegexViewModel: ObservableObject {
     }
     
     private func createRegex() throws -> NSRegularExpression {
-        var options: NSRegularExpression.Options = []
+        var regexOptions: NSRegularExpression.Options = []
         
-        if self.options.caseInsensitive {
-            options.insert(.caseInsensitive)
+        if options.caseInsensitive {
+            regexOptions.insert(.caseInsensitive)
         }
-        if self.options.multiline {
-            options.insert(.anchorsMatchLines)
+        if options.multiline {
+            regexOptions.insert(.anchorsMatchLines)
         }
-        if self.options.dotMatchesAll {
-            options.insert(.dotMatchesLineSeparators)
+        if options.dotMatchesAll {
+            regexOptions.insert(.dotMatchesLineSeparators)
         }
         
-        return try NSRegularExpression(pattern: pattern, options: options)
+        return try NSRegularExpression(pattern: pattern, options: regexOptions)
     }
     
     private func findMatches(with regex: NSRegularExpression) -> [String] {
@@ -61,6 +67,14 @@ class RegexViewModel: ObservableObject {
         return matches.compactMap { match in
             guard let range = Range(match.range, in: testString) else { return nil }
             return String(testString[range])
+        }
+    }
+    
+    func applySamplePattern(_ sample: SamplePattern) {
+        pattern = sample.pattern
+        testString = sample.sampleText
+        Task {
+            await performMatch()
         }
     }
 }

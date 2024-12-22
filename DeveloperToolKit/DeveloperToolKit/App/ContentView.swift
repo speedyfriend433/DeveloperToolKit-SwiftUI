@@ -27,9 +27,10 @@ struct ContentView: View {
             
             SnippetManagerView()
                 .tabItem {
-                    Label("Snippets", systemImage: "text.alignleft") // Updated icon
+                    Label("Snippets", systemImage: "text.alignleft")
                 }
         }
+        .preferredColorScheme(.light) // This locks the TabView and all its children in light mode
     }
 }
 

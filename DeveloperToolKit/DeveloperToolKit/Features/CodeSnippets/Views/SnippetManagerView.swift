@@ -13,90 +13,66 @@ struct SnippetManagerView: View {
     
     var body: some View {
         NavigationView {
-            VStack {
-                // Search bar
-                searchBar
+            VStack(spacing: 0) {
+                // Search and Filter Bar
+                searchAndFilterBar
                 
-                // Filters
-                filterSection
-                
-                // Snippets list
-                List {
-                    ForEach(viewModel.snippets, id: \.id) { snippet in
-                        NavigationLink(destination: SnippetDetailView(snippet: snippet, viewModel: viewModel)) {
-                            SnippetRowView(snippet: snippet)
-                        }
-                    }
-                    .onDelete { indexSet in
-                        Task {
-                            await viewModel.deleteSnippet(at: indexSet)
-                        }
-                    }
+                if viewModel.snippets.isEmpty {
+                    emptyStateView
+                } else {
+                    snippetsList
                 }
             }
+            .background(Theme.background)
             .navigationTitle("Code Snippets")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { viewModel.showAddSnippet = true }) {
-                        Image(systemName: "plus")
+                    Button {
+                        viewModel.showAddSnippet = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .foregroundColor(Theme.primary)
+                            .font(.title3)
                     }
                 }
             }
             .sheet(isPresented: $viewModel.showAddSnippet) {
                 AddSnippetView(viewModel: viewModel)
             }
-            .alert(item: $viewModel.alertItem) { alertItem in
-                Alert(
-                    title: Text(alertItem.title),
-                    message: Text(alertItem.message),
-                    dismissButton: .default(Text(alertItem.dismissButton))
-                )
-            }
         }
     }
     
-    private var searchBar: some View {
-        TextField("Search snippets", text: $viewModel.searchText)
-            .textFieldStyle(.roundedBorder)
-            .padding(.horizontal)
-            .onChange(of: viewModel.searchText) { _ in
-                viewModel.filterSnippets()
-            }
-    }
-    
-    private var filterSection: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
+    private var searchAndFilterBar: some View {
+        VStack(spacing: 12) {
+            // Search Bar
             HStack {
-                // Language filter
-                Menu {
-                    ForEach(viewModel.getAllLanguages(), id: \.self) { language in
-                        Button(language) {
-                            viewModel.selectedLanguageFilter = language
-                            viewModel.filterSnippets()
-                        }
-                    }
-                    
-                    Button("Clear") {
-                        viewModel.selectedLanguageFilter = nil
-                        viewModel.filterSnippets()
-                    }
-                } label: {
-                    Label(
-                        viewModel.selectedLanguageFilter ?? "Language",
-                        systemImage: "chevron.down"
-                    )
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(8)
-                }
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(Theme.text.opacity(0.5))
+                TextField("Search snippets", text: $viewModel.searchText)
+                    .textFieldStyle(.plain)
                 
-                // Tags
-                ForEach(viewModel.getAllTags(), id: \.self) { tag in
-                    TagFilterButton(
-                        tag: tag,
-                        isSelected: viewModel.selectedTags.contains(tag),
-                        action: {
+                if !viewModel.searchText.isEmpty {
+                    Button {
+                        viewModel.searchText = ""
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(Theme.text.opacity(0.5))
+                    }
+                }
+            }
+            .padding(10)
+            .background(Color.white)
+            .cornerRadius(10)
+            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+            
+            // Filter Tags
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(viewModel.getAllTags(), id: \.self) { tag in
+                        FilterChip(
+                            title: tag,
+                            isSelected: viewModel.selectedTags.contains(tag)
+                        ) {
                             if viewModel.selectedTags.contains(tag) {
                                 viewModel.selectedTags.remove(tag)
                             } else {
@@ -104,11 +80,14 @@ struct SnippetManagerView: View {
                             }
                             viewModel.filterSnippets()
                         }
-                    )
+                    }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
         }
+        .padding()
+        .background(Color.white)
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
     
     private var snippetsList: some View {
@@ -123,6 +102,67 @@ struct SnippetManagerView: View {
                     await viewModel.deleteSnippet(at: indexSet)
                 }
             }
+            .listRowBackground(Color.white)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+        }
+        .listStyle(.plain)
+        .refreshable {
+            viewModel.loadSnippets()
+        }
+    }
+    
+    private var emptyStateView: some View {
+        VStack(spacing: 20) {
+            Image(systemName: "doc.text.magnifyingglass")
+                .font(.system(size: 60))
+                .foregroundColor(Theme.primary.opacity(0.3))
+            
+            Text("No Snippets Found")
+                .font(.title2)
+                .foregroundColor(Theme.text)
+            
+            Text("Add your first code snippet by tapping the + button")
+                .font(.subheadline)
+                .foregroundColor(Theme.text.opacity(0.7))
+                .multilineTextAlignment(.center)
+            
+            Button {
+                viewModel.showAddSnippet = true
+            } label: {
+                Text("Add Snippet")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 24)
+                    .padding(.vertical, 12)
+                    .background(Theme.primary)
+                    .cornerRadius(10)
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Theme.background)
+    }
+}
+
+struct FilterChip: View {
+    let title: String
+    let isSelected: Bool
+    let action: () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 6)
+                .background(isSelected ? Theme.primary : Theme.background)
+                .foregroundColor(isSelected ? .white : Theme.text)
+                .cornerRadius(15)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 15)
+                        .stroke(isSelected ? Theme.primary : Theme.text.opacity(0.3), lineWidth: 1)
+                )
         }
     }
 }

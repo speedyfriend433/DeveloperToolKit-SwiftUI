@@ -11,11 +11,12 @@ struct ResponseView: View {
     let response: APIResponse
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 16) {
             Text("Response")
                 .font(.headline)
+                .foregroundColor(Theme.text)
             
-            Group {
+            VStack(alignment: .leading, spacing: 12) {
                 statusView
                 responseTimeView
                 headersView
@@ -23,15 +24,23 @@ struct ResponseView: View {
             }
             .font(.system(.body, design: .monospaced))
         }
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white)
+                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+        )
     }
     
     private var statusView: some View {
-        HStack {
-            Text("Status:")
-            Text("\(response.statusCode)")
-                .foregroundColor(statusColor)
+            HStack {
+                Text("Status:")
+                    .foregroundColor(Theme.text)
+                Text("\(response.statusCode)")
+                    .foregroundColor(statusColor)
+                    .fontWeight(.bold)
+            }
         }
-    }
     
     private var responseTimeView: some View {
         HStack {
@@ -90,5 +99,30 @@ struct ResponseView: View {
             return prettyString
         }
         return response.body
+    }
+}
+
+struct LoadingView: View {
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.2)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 16) {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .tint(Theme.primary)
+                
+                Text("Sending Request...")
+                    .font(.headline)
+                    .foregroundColor(Theme.text)
+            }
+            .padding(24)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.white)
+                    .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+            )
+        }
     }
 }

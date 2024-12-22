@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddSnippetView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject var viewModel: SnippetManagerViewModel
+    @ObservedObject var viewModel: SnippetManagerViewModel
     
     @State private var title = ""
     @State private var code = ""
@@ -23,25 +23,59 @@ struct AddSnippetView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                Section(header: Text("Details")) {
-                    TextField("Title", text: $title)
-                        .focused($focusedField, equals: .title)
+            ScrollView {
+                VStack(spacing: 20) {
+                    // Title Input
+                    InputField(
+                        title: "Title",
+                        text: $title,
+                        icon: "text.alignleft",
+                        focused: $focusedField,
+                        field: .title
+                    )
                     
-                    TextField("Language", text: $language)
-                        .focused($focusedField, equals: .language)
+                    // Language Input
+                    InputField(
+                        title: "Language",
+                        text: $language,
+                        icon: "chevron.left.forwardslash.chevron.right",
+                        focused: $focusedField,
+                        field: .language
+                    )
                     
-                    TextField("Tags (comma separated)", text: $tags)
-                        .focused($focusedField, equals: .tags)
+                    // Tags Input
+                    InputField(
+                        title: "Tags (comma separated)",
+                        text: $tags,
+                        icon: "tag",
+                        focused: $focusedField,
+                        field: .tags
+                    )
+                    
+                    // Code Input
+                    VStack(alignment: .leading, spacing: 8) {
+                        Label("Code", systemImage: "doc.text")
+                            .font(.headline)
+                            .foregroundColor(Theme.text)
+                        
+                        TextEditor(text: $code)
+                            .font(.system(.body, design: .monospaced))
+                            .frame(height: 200)
+                            .padding(8)
+                            .background(Color.white)
+                            .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Theme.border, lineWidth: 1)
+                            )
+                            .focused($focusedField, equals: .code)
+                    }
                 }
-                
-                Section(header: Text("Code")) {
-                    TextEditor(text: $code)
-                        .focused($focusedField, equals: .code)
-                        .frame(minHeight: 200)
-                }
+                .padding()
             }
+            .background(Theme.background)
             .navigationTitle("Add Snippet")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
@@ -74,5 +108,25 @@ struct AddSnippetView: View {
             await viewModel.addSnippet(snippet)
         }
         dismiss()
+    }
+}
+
+struct InputField: View {
+    let title: String
+    let text: Binding<String>
+    let icon: String
+    let focused: FocusState<AddSnippetView.Field?>.Binding
+    let field: AddSnippetView.Field
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label(title, systemImage: icon)
+                .font(.headline)
+                .foregroundColor(Theme.text)
+            
+            TextField(title, text: text)
+                .textFieldStyle(ModernTextFieldStyle())
+                .focused(focused, equals: field)
+        }
     }
 }

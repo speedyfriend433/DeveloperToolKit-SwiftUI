@@ -15,6 +15,7 @@ struct DeveloperToolkitApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.viewContext)
+                .preferredColorScheme(.light) // This locks the app in light mode
         }
     }
 }
