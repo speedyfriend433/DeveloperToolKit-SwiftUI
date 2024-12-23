@@ -50,6 +50,13 @@ All in one Developer Experiment Kits iOS APP! (Still WIP!)
 
 ## Requirements
 
+![STIIITCH_2024_12_23_04_40_26](https://github.com/user-attachments/assets/b292aaba-3a81-4468-8e92-301dbfb416d4)
+![2nd](https://github.com/user-attachments/assets/3ba4f035-8870-4392-975b-e3b852d235a7)
+![3rd](https://github.com/user-attachments/assets/fd312c49-225f-4d9c-9b76-0105c886b015)
+![4th](https://github.com/user-attachments/assets/66ba0733-639e-453e-81c8-7bc52f414ad4)
+
+## Requirements
+
 - iOS 16.0+ (iOS 16+ Symbols were used)
 - Xcode 13.0+
 - Swift 5.5+
