@@ -12,7 +12,7 @@ struct SnippetRowView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Title and Language
+            
             HStack {
                 Text(snippet.title)
                     .font(.headline)
@@ -29,13 +29,11 @@ struct SnippetRowView: View {
                     .cornerRadius(8)
             }
             
-            // Preview of code
             Text(snippet.code.prefix(100) + (snippet.code.count > 100 ? "..." : ""))
                 .font(.system(.caption, design: .monospaced))
                 .foregroundColor(Theme.text.opacity(0.7))
                 .lineLimit(2)
             
-            // Tags
             if !snippet.tags.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
@@ -52,7 +50,6 @@ struct SnippetRowView: View {
                 }
             }
             
-            // Date
             Text(snippet.dateCreated.formatted(date: .abbreviated, time: .omitted))
                 .font(.caption2)
                 .foregroundColor(Theme.text.opacity(0.5))

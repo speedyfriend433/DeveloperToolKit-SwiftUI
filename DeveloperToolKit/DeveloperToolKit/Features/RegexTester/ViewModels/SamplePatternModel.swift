@@ -173,7 +173,7 @@ struct PatternCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header
+
             HStack {
                 Text(pattern.name)
                     .font(.headline)
@@ -189,19 +189,16 @@ struct PatternCard: View {
                 }
             }
             
-            // Description
             Text(pattern.description)
                 .font(.subheadline)
                 .foregroundColor(.gray)
             
-            // Pattern
             Text(pattern.pattern)
                 .font(.system(.caption, design: .monospaced))
                 .padding(8)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(6)
             
-            // Examples Toggle
             DisclosureGroup(
                 isExpanded: $showingExamples,
                 content: {

@@ -13,14 +13,13 @@ struct ResponseView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            // Status and Time Section
+
             HStack {
                 statusView
                 Spacer()
                 responseTimeView
             }
-            
-            // Headers Section
+
             VStack(alignment: .leading, spacing: 8) {
                 SectionHeader(title: "Headers", action: copyHeaders)
                 
@@ -40,7 +39,6 @@ struct ResponseView: View {
                 .cornerRadius(8)
             }
             
-            // Body Section
             VStack(alignment: .leading, spacing: 8) {
                 SectionHeader(title: "Body", action: copyBody)
                 
@@ -55,7 +53,6 @@ struct ResponseView: View {
                 .cornerRadius(8)
             }
             
-            // Copy All Button
             Button(action: copyAll) {
                 HStack {
                     Image(systemName: "doc.on.doc")
@@ -78,6 +75,29 @@ struct ResponseView: View {
         .overlay(
             copiedOverlay
         )
+    }
+    
+    struct SectionHeader: View {
+        let title: String
+        let action: () -> Void
+
+        var body: some View {
+            HStack {
+                Text(title)
+                    .font(.headline)
+
+                Spacer()
+
+                Button(action: action) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "doc.on.doc")
+                        Text("Copy")
+                    }
+                    .font(.caption)
+                    .foregroundColor(Theme.primary)
+                }
+            }
+        }
     }
     
     private var statusView: some View {
@@ -172,25 +192,4 @@ struct ResponseView: View {
     }
 }
 
-struct SectionHeader: View {
-    let title: String
-    let action: () -> Void
-    
-    var body: some View {
-        HStack {
-            Text(title)
-                .font(.headline)
-            
-            Spacer()
-            
-            Button(action: action) {
-                HStack(spacing: 4) {
-                    Image(systemName: "doc.on.doc")
-                    Text("Copy")
-                }
-                .font(.caption)
-                .foregroundColor(Theme.primary)
-            }
-        }
-    }
-}
+

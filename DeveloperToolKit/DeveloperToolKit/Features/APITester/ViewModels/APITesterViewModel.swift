@@ -19,14 +19,13 @@ class APITesterViewModel: ObservableObject {
     @Published var showTemplates = false
     
     func loadTemplate(_ template: RequestTemplate) {
-        // Convert template method string to RequestMethod
+
         if let method = RequestMethod(rawValue: template.request.method) {
             selectedMethod = method
         }
         
         url = template.request.url
         
-        // Convert template headers to Header objects
         headers = template.request.headers.map { dict in
             Header(key: dict["key"] ?? "", value: dict["value"] ?? "")
         }
@@ -94,7 +93,6 @@ class APITesterViewModel: ObservableObject {
             )
         )
         
-        // Here you would typically save the template to persistent storage
         print("Template saved:", template)
     }
 }

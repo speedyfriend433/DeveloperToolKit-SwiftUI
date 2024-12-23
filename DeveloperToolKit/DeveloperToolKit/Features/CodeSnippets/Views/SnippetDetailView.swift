@@ -15,9 +15,13 @@ struct SnippetDetailView: View {
     @State private var editedTitle = ""
     @State private var editedLanguage = ""
     @State private var editedTags = ""
-    @FocusState private var focusedField: FormFieldType?
+    @FocusState private var focusedField: Field?
     @Environment(\.dismiss) private var dismiss
     @State private var currentSnippet: SnippetModel
+    
+    enum Field {
+        case title, code, language, tags
+    }
     
     init(snippet: SnippetModel, viewModel: SnippetManagerViewModel) {
         self.snippet = snippet
@@ -64,25 +68,11 @@ struct SnippetDetailView: View {
                 }
             }
         }
-        .alert(item: $viewModel.alertItem) { alertItem in
-            Alert(
-                title: Text(alertItem.title),
-                message: Text(alertItem.message),
-                dismissButton: .default(Text(alertItem.dismissButton)) {
-                    if alertItem.title == "Success" {
-                        isEditing = false
-                    }
-                }
-            )
-        }
     }
-}
-
-// MARK: - Subviews
-extension SnippetDetailView {
-    var displayView: some View {
+    
+    private var displayView: some View {
         VStack(alignment: .leading, spacing: 20) {
-            // Metadata Card
+
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Text(currentSnippet.language)
@@ -97,7 +87,7 @@ extension SnippetDetailView {
                     
                     Text(currentSnippet.dateCreated.formatted())
                         .font(.caption)
-                        .foregroundColor(Theme.text.opacity(0.5))
+                        .foregroundColor(.gray)
                 }
                 
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -119,12 +109,10 @@ extension SnippetDetailView {
             .cornerRadius(12)
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
             
-            // Code Card
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Text("Code")
                         .font(.headline)
-                        .foregroundColor(Theme.text)
                     
                     Spacer()
                     
@@ -141,7 +129,7 @@ extension SnippetDetailView {
                     Text(currentSnippet.code)
                         .font(.system(.body, design: .monospaced))
                         .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
                 }
                 .background(Color.white)
                 .cornerRadius(12)
@@ -154,65 +142,12 @@ extension SnippetDetailView {
             .background(Color.white)
             .cornerRadius(12)
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-            
-            // Actions
-            VStack(spacing: 12) {
-                ShareButton(code: currentSnippet.code)
-                DeleteButton {
-                    Task {
-                        await viewModel.deleteSnippet(at: IndexSet([0]))
-                        dismiss()
-                    }
-                }
-            }
         }
     }
     
-    // MARK: - Supporting Views
-    struct ShareButton: View {
-        let code: String
-        
-        var body: some View {
-            ShareLink(
-                item: code,
-                preview: SharePreview("Code Snippet", image: "doc.text")
-            ) {
-                HStack {
-                    Image(systemName: "square.and.arrow.up")
-                    Text("Share Snippet")
-                }
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Theme.primary)
-                .cornerRadius(12)
-            }
-        }
-    }
-
-    struct DeleteButton: View {
-        let action: () -> Void
-        
-        var body: some View {
-            Button(action: action) {
-                HStack {
-                    Image(systemName: "trash")
-                    Text("Delete Snippet")
-                }
-                .font(.headline)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Theme.error)
-                .cornerRadius(12)
-            }
-        }
-    }
-    
-    var editView: some View {
+    private var editView: some View {
         VStack(spacing: 20) {
-            DetailInputField(
+            SnippetInputField(
                 title: "Title",
                 text: $editedTitle,
                 icon: "text.alignleft",
@@ -220,7 +155,7 @@ extension SnippetDetailView {
                 field: .title
             )
             
-            DetailInputField(
+            SnippetInputField(
                 title: "Language",
                 text: $editedLanguage,
                 icon: "chevron.left.forwardslash.chevron.right",
@@ -228,7 +163,7 @@ extension SnippetDetailView {
                 field: .language
             )
             
-            DetailInputField(
+            SnippetInputField(
                 title: "Tags (comma separated)",
                 text: $editedTags,
                 icon: "tag",
@@ -259,20 +194,15 @@ extension SnippetDetailView {
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
-}
-
-// MARK: - Helper Methods
-extension SnippetDetailView {
-    func setupInitialValues() {
+    
+    private func setupInitialValues() {
         editedCode = currentSnippet.code
         editedTitle = currentSnippet.title
         editedLanguage = currentSnippet.language
         editedTags = currentSnippet.tags.joined(separator: ", ")
     }
     
-    func saveChanges() async {
-        guard !editedTitle.isEmpty else { return }
-        
+    private func saveChanges() async {
         let updatedSnippet = SnippetModel(
             id: currentSnippet.id,
             title: editedTitle.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -285,33 +215,25 @@ extension SnippetDetailView {
         )
         
         await viewModel.updateSnippet(updatedSnippet)
-        
-        if viewModel.alertItem?.title == "Success" {
-            currentSnippet = updatedSnippet
-        }
+        currentSnippet = updatedSnippet
+        isEditing = false
     }
 }
 
-#if DEBUG
-struct SnippetDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            SnippetDetailView(
-                snippet: SnippetModel(
-                    id: UUID(),
-                    title: "Example Snippet",
-                    code: """
-                    func example() {
-                        print("Hello, World!")
-                    }
-                    """,
-                    language: "Swift",
-                    tags: ["iOS", "Swift", "Example"],
-                    dateCreated: Date()
-                ),
-                viewModel: SnippetManagerViewModel()
-            )
-        }
+
+
+#Preview {
+    NavigationView {
+        SnippetDetailView(
+            snippet: SnippetModel(
+                id: UUID(),
+                title: "Example Snippet",
+                code: "print(\"Hello, World!\")",
+                language: "Swift",
+                tags: ["iOS", "Swift"],
+                dateCreated: Date()
+            ),
+            viewModel: SnippetManagerViewModel()
+        )
     }
 }
-#endif

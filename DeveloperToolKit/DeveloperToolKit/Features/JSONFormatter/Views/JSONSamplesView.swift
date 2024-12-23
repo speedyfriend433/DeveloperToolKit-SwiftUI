@@ -162,7 +162,7 @@ struct SampleCard: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header
+
             HStack {
                 Text(name)
                     .font(.headline)
@@ -175,16 +175,14 @@ struct SampleCard: View {
                     .foregroundColor(.gray)
             }
             
-            // Preview
             Text(json.prefix(200) + (json.count > 200 ? "..." : ""))
                 .font(.system(.caption, design: .monospaced))
                 .foregroundColor(Theme.text.opacity(0.8))
                 .lineLimit(5)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            // Action Buttons
             HStack {
-                // Copy Button
+                
                 Button {
                     UIPasteboard.general.string = json
                 } label: {
@@ -196,7 +194,6 @@ struct SampleCard: View {
                 
                 Spacer()
                 
-                // Use Button
                 Button(action: onSelect) {
                     Label("Use This", systemImage: "arrow.right.circle.fill")
                         .font(.caption)

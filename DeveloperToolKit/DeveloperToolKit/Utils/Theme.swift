@@ -8,16 +8,43 @@
 import SwiftUI
 
 struct Theme {
-    static let primary = Color(hex: "FF7F50")     // Coral Orange
-    static let secondary = Color(hex: "FFA07A")   // Light Salmon
-    static let background = Color(hex: "FFF8F0")  // Light cream
-    static let text = Color(hex: "2D3436")        // Dark Gray
-    static let border = Color(hex: "FFE4E1")      // Misty Rose
+
+    private static let lightPrimary = Color(hex: "FF7F50")
+    private static let lightSecondary = Color(hex: "FFA07A")
+    private static let lightBackground = Color(hex: "FFF8F0")
+    private static let lightText = Color(hex: "2D3436")
+    private static let lightBorder = Color(hex: "FFE4E1")
+    private static let darkPrimary = Color(hex: "FF9F7D")
+    private static let darkSecondary = Color(hex: "FFB59E")
+    private static let darkBackground = Color(hex: "1C1C1E")
+    private static let darkText = Color(hex: "FFFFFF")
+    private static let darkBorder = Color(hex: "3A3A3C")
     
-    static let success = Color.green
-    static let warning = Color.orange
-    static let error = Color.red
-    static let info = Color.blue
+    @Environment(\.colorScheme) static var colorScheme
+    
+    static var primary: Color {
+        colorScheme == .dark ? darkPrimary : lightPrimary
+    }
+    
+    static var secondary: Color {
+        colorScheme == .dark ? darkSecondary : lightSecondary
+    }
+    
+    static var background: Color {
+        colorScheme == .dark ? darkBackground : lightBackground
+    }
+    
+    static var text: Color {
+        colorScheme == .dark ? darkText : lightText
+    }
+    
+    static var border: Color {
+        colorScheme == .dark ? darkBorder : lightBorder
+    }
+    
+    static var error: Color {
+        .red
+    }
 }
 
 extension Color {
@@ -36,6 +63,7 @@ extension Color {
         default:
             (a, r, g, b) = (1, 1, 1, 0)
         }
+
         self.init(
             .sRGB,
             red: Double(r) / 255,

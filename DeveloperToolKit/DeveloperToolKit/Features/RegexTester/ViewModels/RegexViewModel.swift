@@ -30,7 +30,6 @@ class RegexViewModel: ObservableObject {
                 let regex = try createRegex()
                 matches = findMatches(with: regex)
                 
-                // Add feedback for no matches
                 if matches.isEmpty {
                     alertItem = AlertItem(
                         title: "No Matches",

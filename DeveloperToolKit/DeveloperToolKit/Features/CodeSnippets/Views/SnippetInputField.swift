@@ -1,13 +1,13 @@
 //
-//  DetailInputField.swift
+//  SnippetInputField.swift
 //  DeveloperToolKit
 //
-//  Created by speedy on 2024/12/22.
+//  Created by speedy on 2024/12/23.
 //
 
 import SwiftUI
 
-struct DetailInputField: View {
+struct SnippetInputField: View {
     let title: String
     let text: Binding<String>
     let icon: String
@@ -26,20 +26,3 @@ struct DetailInputField: View {
         }
     }
 }
-
-#if DEBUG
-struct DetailInputField_Previews: PreviewProvider {
-    @FocusState static var focus: FormFieldType?
-    
-    static var previews: some View {
-        DetailInputField(
-            title: "Example Field",
-            text: Binding.constant("Example Text"),
-            icon: "text.alignleft",
-            focused: $focus,
-            field: .title
-        )
-        .padding()
-    }
-}
-#endif

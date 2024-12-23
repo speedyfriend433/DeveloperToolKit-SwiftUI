@@ -29,7 +29,7 @@ struct RequestTemplate: Identifiable, Codable {
     }
     
     static let samples: [RequestTemplate] = [
-        // Public APIs
+
         RequestTemplate(
             id: UUID(),
             name: "Get Random User",
@@ -60,7 +60,6 @@ struct RequestTemplate: Identifiable, Codable {
             )
         ),
         
-        // Weather APIs
         RequestTemplate(
             id: UUID(),
             name: "Get Current Weather",
@@ -76,7 +75,6 @@ struct RequestTemplate: Identifiable, Codable {
             )
         ),
         
-        // GitHub API
         RequestTemplate(
             id: UUID(),
             name: "Get GitHub User",
@@ -107,7 +105,6 @@ struct RequestTemplate: Identifiable, Codable {
             )
         ),
         
-        // JSONPlaceholder (Testing APIs)
         RequestTemplate(
             id: UUID(),
             name: "Get Posts",
@@ -145,7 +142,6 @@ struct RequestTemplate: Identifiable, Codable {
             )
         ),
         
-        // Authentication Examples
         RequestTemplate(
             id: UUID(),
             name: "OAuth Token Request",
@@ -162,7 +158,6 @@ struct RequestTemplate: Identifiable, Codable {
             )
         ),
         
-        // REST Countries API
         RequestTemplate(
             id: UUID(),
             name: "Get Country Info",
@@ -178,7 +173,6 @@ struct RequestTemplate: Identifiable, Codable {
             )
         ),
         
-        // Dog API
         RequestTemplate(
             id: UUID(),
             name: "Random Dog Image",

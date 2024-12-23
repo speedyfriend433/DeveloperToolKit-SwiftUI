@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var settingsViewModel = SettingsViewModel()
+    
     var body: some View {
         TabView {
             APITesterView()
@@ -29,8 +31,13 @@ struct ContentView: View {
                 .tabItem {
                     Label("Snippets", systemImage: "text.alignleft")
                 }
+            
+            SettingsView()
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
         }
-        .preferredColorScheme(.light) // This locks the TabView and all its children in light mode
+        .preferredColorScheme(settingsViewModel.selectedTheme.colorScheme)
     }
 }
 

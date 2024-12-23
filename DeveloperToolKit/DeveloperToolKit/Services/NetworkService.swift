@@ -16,7 +16,7 @@ enum NetworkError: Error {
 class NetworkService {
     static func makeRequest(
         url: URL,
-        method: RequestMethod, // Changed from HTTPMethod to RequestMethod
+        method: RequestMethod,
         headers: [Header],
         body: String?
     ) async throws -> APIResponse {

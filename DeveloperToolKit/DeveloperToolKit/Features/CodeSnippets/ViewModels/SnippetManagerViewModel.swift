@@ -26,9 +26,12 @@ class SnippetManagerViewModel: ObservableObject {
     
     func loadSnippets() {
         let request = NSFetchRequest<CodeSnippetEntity>(entityName: "CodeSnippetEntity")
-        
-        // Apply filters
         var predicates: [NSPredicate] = []
+        
+        print("Current state:")
+        print("- Search text: \(searchText)")
+        print("- Selected language: \(String(describing: selectedLanguageFilter))")
+        print("- Selected tags: \(selectedTags)")
         
         if !searchText.isEmpty {
             predicates.append(NSPredicate(format: "title CONTAINS[cd] %@ OR code CONTAINS[cd] %@",
@@ -40,12 +43,15 @@ class SnippetManagerViewModel: ObservableObject {
         }
         
         if !selectedTags.isEmpty {
-            let tagPredicate = NSPredicate(format: "ANY tags IN %@", Array(selectedTags))
+            let tagsArray = Array(selectedTags)
+            print("Filtering for tags: \(tagsArray)")
+            let tagPredicate = NSPredicate(format: "ANY tags IN %@", tagsArray as NSArray)
             predicates.append(tagPredicate)
         }
         
         if !predicates.isEmpty {
             request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+            print("Applied predicate: \(request.predicate?.description ?? "none")")
         }
         
         request.sortDescriptors = [NSSortDescriptor(keyPath: \CodeSnippetEntity.dateCreated,
@@ -53,16 +59,23 @@ class SnippetManagerViewModel: ObservableObject {
         
         do {
             let entities = try context.fetch(request)
+            print("Found \(entities.count) entities")
+            
             snippets = entities.map { entity in
-                SnippetModel(
+                let tags = entity.tags as? [String] ?? []
+                print("Processing entity: title=\(entity.title ?? ""), tags=\(tags)")
+                
+                return SnippetModel(
                     id: entity.id ?? UUID(),
                     title: entity.title ?? "",
                     code: entity.code ?? "",
                     language: entity.language ?? "",
-                    tags: (entity.tags as? [String]) ?? [],
+                    tags: tags,
                     dateCreated: entity.dateCreated ?? Date()
                 )
             }
+            
+            print("Processed \(snippets.count) snippets")
         } catch {
             print("Error loading snippets: \(error)")
             alertItem = AlertItem(
@@ -82,10 +95,13 @@ class SnippetManagerViewModel: ObservableObject {
         entity.tags = snippet.tags as NSArray
         entity.dateCreated = snippet.dateCreated
         
+        print("Adding snippet: \(snippet.title) with tags: \(snippet.tags)")
+        
         do {
             try context.save()
             loadSnippets()
         } catch {
+            print("Error saving snippet: \(error)")
             alertItem = AlertItem(
                 title: "Error",
                 message: "Failed to save snippet: \(error.localizedDescription)",
@@ -108,8 +124,15 @@ class SnippetManagerViewModel: ObservableObject {
                 
                 try context.save()
                 loadSnippets()
+                
+                alertItem = AlertItem(
+                    title: "Success",
+                    message: "Snippet updated successfully",
+                    dismissButton: "OK"
+                )
             }
         } catch {
+            print("Error updating snippet: \(error)")
             alertItem = AlertItem(
                 title: "Error",
                 message: "Failed to update snippet: \(error.localizedDescription)",
@@ -131,6 +154,7 @@ class SnippetManagerViewModel: ObservableObject {
                     context.delete(entity)
                 }
             } catch {
+                print("Error deleting snippet: \(error)")
                 alertItem = AlertItem(
                     title: "Error",
                     message: "Failed to delete snippet: \(error.localizedDescription)",
@@ -144,6 +168,7 @@ class SnippetManagerViewModel: ObservableObject {
             try context.save()
             loadSnippets()
         } catch {
+            print("Error saving after delete: \(error)")
             alertItem = AlertItem(
                 title: "Error",
                 message: "Failed to save changes: \(error.localizedDescription)",
@@ -158,8 +183,11 @@ class SnippetManagerViewModel: ObservableObject {
         do {
             let entities = try context.fetch(request)
             let allTags = entities.compactMap { $0.tags as? [String] }.flatMap { $0 }
-            return Array(Set(allTags)).sorted()
+            let uniqueTags = Array(Set(allTags)).sorted()
+            print("Available tags: \(uniqueTags)")
+            return uniqueTags
         } catch {
+            print("Error fetching tags: \(error)")
             return []
         }
     }

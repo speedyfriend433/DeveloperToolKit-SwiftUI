@@ -26,7 +26,7 @@ struct JSONFormatterView: View {
             .background(Theme.background)
             .navigationTitle("JSON Formatter")
             .toolbar {
-                // Navigation Bar Items
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button {
@@ -57,7 +57,6 @@ struct JSONFormatterView: View {
                     }
                 }
                 
-                // Keyboard Toolbar
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") {
@@ -263,16 +262,13 @@ struct JSONSamplesView: View {
 extension AttributedString {
     init(highlighting json: String) {
         let attributedString = NSMutableAttributedString(string: json)
-        
-        // Define patterns and colors for different JSON elements
         let patterns: [(pattern: String, color: Color)] = [
-            ("\".*?\"", .blue), // Strings
-            ("\\b\\d+\\.?\\d*\\b", .orange), // Numbers
-            ("\\b(true|false|null)\\b", .purple), // Keywords
-            ("[{\\[\\]},:]", .gray) // Symbols
+            ("\".*?\"", .blue),
+            ("\\b\\d+\\.?\\d*\\b", .orange),
+            ("\\b(true|false|null)\\b", .purple),
+            ("[{\\[\\]},:]", .gray)
         ]
         
-        // Apply highlighting
         for (pattern, color) in patterns {
             guard let regex = try? NSRegularExpression(pattern: pattern) else { continue }
             let range = NSRange(json.startIndex..., in: json)

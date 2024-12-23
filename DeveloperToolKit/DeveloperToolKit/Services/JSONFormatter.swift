@@ -30,7 +30,6 @@ enum JSONFormatter {
         
         var prettyString = String(data: prettyData, encoding: .utf8) ?? ""
         
-        // Apply custom formatting
         if options.useTabs {
             prettyString = prettyString.replacingOccurrences(
                 of: String(repeating: " ", count: 2),
@@ -77,7 +76,6 @@ enum JSONFormatter {
             let trimmedLine = line.trimmingCharacters(in: .whitespaces)
             var modifiedLine = line
             
-            // Track brackets and braces
             if let lastChar = trimmedLine.last {
                 if lastChar == "{" || lastChar == "[" {
                     bracketStack.append(lastChar)
@@ -88,7 +86,6 @@ enum JSONFormatter {
                 }
             }
             
-            // Check if we need to add a comma
             if !bracketStack.isEmpty && index < lines.count - 1 {
                 let nextLine = lines[index + 1].trimmingCharacters(in: .whitespaces)
                 let nextLineFirstChar = nextLine.first ?? " "
@@ -106,21 +103,18 @@ enum JSONFormatter {
     }
     
     private static func shouldAddComma(to line: String) -> Bool {
-        // Skip empty lines
+
         guard !line.isEmpty else { return false }
         
-        // Skip lines that already end with a comma
         guard !line.hasSuffix(",") else { return false }
         
-        // Skip lines that end with opening brackets
         guard !line.hasSuffix("{") && !line.hasSuffix("[") else { return false }
         
-        // Check if line ends with a value
         let valuePatterns = [
-            #"\"[^\"]*\"$"#,          // String
-            #"\d+\.?\d*$"#,           // Number
-            #"true$|false$|null$"#,   // Boolean or null
-            #"\}$|\]$"#               // Closing bracket
+            #"\"[^\"]*\"$"#,
+            #"\d+\.?\d*$"#,
+            #"true$|false$|null$"#,
+            #"\}$|\]$"#
         ]
         
         return valuePatterns.contains { pattern in
@@ -156,7 +150,7 @@ enum JSONError: Error {
 }
 
 #if DEBUG
-// Example usage and tests
+
 extension JSONFormatter {
     static var examples: [(String, String)] {
         [

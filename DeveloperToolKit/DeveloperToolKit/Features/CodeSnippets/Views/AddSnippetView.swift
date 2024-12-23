@@ -21,7 +21,7 @@ struct AddSnippetView: View {
         NavigationView {
             Form {
                 Section(header: Text("Details")) {
-                    AddSnippetInputField(  // Changed from InputField to AddSnippetInputField
+                    AddSnippetInputField(
                         title: "Title",
                         text: $title,
                         icon: "text.alignleft",
@@ -29,7 +29,7 @@ struct AddSnippetView: View {
                         field: .title
                     )
                     
-                    AddSnippetInputField(  // Changed here too
+                    AddSnippetInputField(
                         title: "Language",
                         text: $language,
                         icon: "chevron.left.forwardslash.chevron.right",
@@ -88,7 +88,7 @@ struct AddSnippetView: View {
     }
 }
 
-struct AddSnippetInputField: View {  // Renamed from InputField to AddSnippetInputField
+struct AddSnippetInputField: View {
     let title: String
     let text: Binding<String>
     let icon: String

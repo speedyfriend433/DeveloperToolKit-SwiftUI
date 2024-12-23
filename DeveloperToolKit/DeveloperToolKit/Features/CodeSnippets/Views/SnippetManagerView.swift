@@ -14,7 +14,6 @@ struct SnippetManagerView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Search and Filter Bar
                 searchAndFilterBar
                 
                 if viewModel.snippets.isEmpty {
@@ -87,7 +86,7 @@ struct SnippetManagerView: View {
     
     private var searchAndFilterBar: some View {
         VStack(spacing: 12) {
-            // Search Bar
+
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(Theme.text.opacity(0.5))
@@ -108,7 +107,6 @@ struct SnippetManagerView: View {
             .cornerRadius(10)
             .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
             
-            // Filter Tags
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
                     ForEach(viewModel.getAllTags(), id: \.self) { tag in

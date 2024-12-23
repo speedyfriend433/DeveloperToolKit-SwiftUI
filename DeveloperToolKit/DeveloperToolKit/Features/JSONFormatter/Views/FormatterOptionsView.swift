@@ -16,10 +16,8 @@ struct FormatterOptionsView: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 20) {
-                    // Category Selector
+
                     categoryPicker
-                    
-                    // Content
                     content
                         .animation(.easeInOut, value: selectedTab)
                 }

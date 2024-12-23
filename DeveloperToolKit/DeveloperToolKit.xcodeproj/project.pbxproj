@@ -11,6 +11,10 @@
 		8E1300E32D1927B20043E38A /* JSONSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1300E22D1927B20043E38A /* JSONSample.swift */; };
 		8E1300E52D19349E0043E38A /* CustomTransformerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1300E42D19349E0043E38A /* CustomTransformerClass.swift */; };
 		8E1300F12D1947580043E38A /* RegexPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1300F02D1947580043E38A /* RegexPattern.swift */; };
+		8E22B7312D198B7200CA6648 /* SnippetInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E22B7302D198B7200CA6648 /* SnippetInputField.swift */; };
+		8E22B7342D1994E900CA6648 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E22B7332D1994E900CA6648 /* SettingsView.swift */; };
+		8E22B7372D19951800CA6648 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E22B7362D19951800CA6648 /* SettingsViewModel.swift */; };
+		8E22B7392D19953000CA6648 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E22B7382D19953000CA6648 /* AppTheme.swift */; };
 		8E28E2EC2D1720AF00C23C1D /* DeveloperToolKitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E28E2EB2D1720AF00C23C1D /* DeveloperToolKitApp.swift */; };
 		8E28E2EE2D1720AF00C23C1D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E28E2ED2D1720AF00C23C1D /* ContentView.swift */; };
 		8E28E2F02D1720B100C23C1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E28E2EF2D1720B100C23C1D /* Assets.xcassets */; };
@@ -47,7 +51,6 @@
 		8E3B2E062D17BF3800113550 /* SnippetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E052D17BF3800113550 /* SnippetModel.swift */; };
 		8E3B2E0C2D17D77300113550 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0B2D17D77300113550 /* Theme.swift */; };
 		8E3B2E0E2D17E37F00113550 /* SamplePatternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */; };
-		8E9559412D183B1300BCF6A7 /* DetailInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559402D183B1300BCF6A7 /* DetailInputField.swift */; };
 		8E9559432D183B3300BCF6A7 /* FormFieldType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559422D183B3300BCF6A7 /* FormFieldType.swift */; };
 		8E9559452D18495B00BCF6A7 /* JSONFormatterOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559442D18495B00BCF6A7 /* JSONFormatterOptions.swift */; };
 		8E9559472D184A1F00BCF6A7 /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559462D184A1F00BCF6A7 /* ActionButton.swift */; };
@@ -86,6 +89,10 @@
 		8E1300E22D1927B20043E38A /* JSONSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSample.swift; sourceTree = "<group>"; };
 		8E1300E42D19349E0043E38A /* CustomTransformerClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransformerClass.swift; sourceTree = "<group>"; };
 		8E1300F02D1947580043E38A /* RegexPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegexPattern.swift; sourceTree = "<group>"; };
+		8E22B7302D198B7200CA6648 /* SnippetInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetInputField.swift; sourceTree = "<group>"; };
+		8E22B7332D1994E900CA6648 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		8E22B7362D19951800CA6648 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		8E22B7382D19953000CA6648 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
 		8E28E2E82D1720AF00C23C1D /* DeveloperToolKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeveloperToolKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E28E2EB2D1720AF00C23C1D /* DeveloperToolKitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperToolKitApp.swift; sourceTree = "<group>"; };
 		8E28E2ED2D1720AF00C23C1D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -125,7 +132,6 @@
 		8E3B2E052D17BF3800113550 /* SnippetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetModel.swift; sourceTree = "<group>"; };
 		8E3B2E0B2D17D77300113550 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePatternModel.swift; sourceTree = "<group>"; };
-		8E9559402D183B1300BCF6A7 /* DetailInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInputField.swift; sourceTree = "<group>"; };
 		8E9559422D183B3300BCF6A7 /* FormFieldType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormFieldType.swift; sourceTree = "<group>"; };
 		8E9559442D18495B00BCF6A7 /* JSONFormatterOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONFormatterOptions.swift; sourceTree = "<group>"; };
 		8E9559462D184A1F00BCF6A7 /* ActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
@@ -167,6 +173,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8E22B72F2D198B6900CA6648 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8E22B7322D1994E100CA6648 /* Views */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		8E22B7322D1994E100CA6648 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8E22B7332D1994E900CA6648 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		8E22B7352D19950A00CA6648 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8E22B7362D19951800CA6648 /* SettingsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		8E28E2DF2D1720AF00C23C1D = {
 			isa = PBXGroup;
 			children = (
@@ -190,6 +220,7 @@
 		8E28E2EA2D1720AF00C23C1D /* DeveloperToolKit */ = {
 			isa = PBXGroup;
 			children = (
+				8E22B7352D19950A00CA6648 /* ViewModels */,
 				8E28E33D2D17266D00C23C1D /* Views */,
 				8E28E3212D17215300C23C1D /* Utils */,
 				8E28E3202D17214E00C23C1D /* Services */,
@@ -265,6 +296,7 @@
 				8E9559542D186C9F00BCF6A7 /* FormatterTypes.swift */,
 				8E1300E22D1927B20043E38A /* JSONSample.swift */,
 				8E1300F02D1947580043E38A /* RegexPattern.swift */,
+				8E22B7382D19953000CA6648 /* AppTheme.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -320,6 +352,7 @@
 		8E28E3262D1722AD00C23C1D /* CodeSnippets */ = {
 			isa = PBXGroup;
 			children = (
+				8E22B72F2D198B6900CA6648 /* Settings */,
 				8E28E3512D17276000C23C1D /* ViewModels */,
 				8E28E34C2D17273300C23C1D /* Views */,
 			);
@@ -399,6 +432,7 @@
 				8E28E34F2D17274F00C23C1D /* SnippetRowView.swift */,
 				8E28E3542D17277B00C23C1D /* AddSnippetView.swift */,
 				8E9559462D184A1F00BCF6A7 /* ActionButton.swift */,
+				8E22B7302D198B7200CA6648 /* SnippetInputField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -414,7 +448,6 @@
 		8E95593F2D183B0A00BCF6A7 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				8E9559402D183B1300BCF6A7 /* DetailInputField.swift */,
 				8E9559522D186C2500BCF6A7 /* JSONFormatterComponents.swift */,
 				8E9559562D186CB000BCF6A7 /* FormatterInputEditor.swift */,
 				8E9559582D186CC400BCF6A7 /* FormatterSyntaxView.swift */,
@@ -582,6 +615,7 @@
 				8E1300F12D1947580043E38A /* RegexPattern.swift in Sources */,
 				8E9559592D186CC400BCF6A7 /* FormatterSyntaxView.swift in Sources */,
 				8E28E3552D17277B00C23C1D /* AddSnippetView.swift in Sources */,
+				8E22B7392D19953000CA6648 /* AppTheme.swift in Sources */,
 				8E3B2DF62D17B5A400113550 /* Header.swift in Sources */,
 				8E9559572D186CB000BCF6A7 /* FormatterInputEditor.swift in Sources */,
 				8E9559472D184A1F00BCF6A7 /* ActionButton.swift in Sources */,
@@ -592,13 +626,15 @@
 				8E28E3292D1722CC00C23C1D /* APITesterView.swift in Sources */,
 				8E28E2EC2D1720AF00C23C1D /* DeveloperToolKitApp.swift in Sources */,
 				8E3B2E062D17BF3800113550 /* SnippetModel.swift in Sources */,
+				8E22B7342D1994E900CA6648 /* SettingsView.swift in Sources */,
 				8E3B2DF42D17B56600113550 /* HTTPMethod.swift in Sources */,
-				8E9559412D183B1300BCF6A7 /* DetailInputField.swift in Sources */,
 				8E28E3572D1727C400C23C1D /* SnippetDetailView.swift in Sources */,
 				8E3B2E042D17BC4C00113550 /* CoreDataManager.swift in Sources */,
 				8E1300E12D1927980043E38A /* JSONSamplesView.swift in Sources */,
 				8E3B2E022D17BBFA00113550 /* CodeSnippet.xcdatamodeld in Sources */,
 				8E3B2DF82D17B5B800113550 /* APIResponse.swift in Sources */,
+				8E22B7312D198B7200CA6648 /* SnippetInputField.swift in Sources */,
+				8E22B7372D19951800CA6648 /* SettingsViewModel.swift in Sources */,
 				8E28E3362D17247100C23C1D /* Models.swift in Sources */,
 				8E95595D2D186CEE00BCF6A7 /* FormatterActionButton.swift in Sources */,
 				8E9559552D186C9F00BCF6A7 /* FormatterTypes.swift in Sources */,
@@ -691,7 +727,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -748,7 +784,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;

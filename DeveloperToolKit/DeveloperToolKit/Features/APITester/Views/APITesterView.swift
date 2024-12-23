@@ -35,7 +35,7 @@ struct APITesterView: View {
             .background(Theme.background)
             .navigationTitle("API Tester")
             .toolbar {
-                // Navigation Bar Items
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Menu {
                         Button {
@@ -54,7 +54,6 @@ struct APITesterView: View {
                     }
                 }
                 
-                // Keyboard Toolbar
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button("Done") {
