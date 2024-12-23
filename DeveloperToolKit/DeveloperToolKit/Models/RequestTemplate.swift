@@ -66,7 +66,7 @@ struct RequestTemplate: Identifiable, Codable {
             description: "Get weather for London (OpenWeatherMap)",
             category: "Weather",
             request: TemplateRequest(
-                url: "https://api.openweathermap.org/data/2.5/weather?q=London&appid=c40fdb07dad7a0f2a474ef8d79b9a386",
+                url: "https://api.openweathermap.org/data/2.5/weather?q=London&appid=c40fdb07dad7a0f2a474ef8d79b9a386", // placeholder API Key, replace with your own Actual API key
                 method: "GET",
                 headers: [
                     ["key": "Accept", "value": "application/json"]
