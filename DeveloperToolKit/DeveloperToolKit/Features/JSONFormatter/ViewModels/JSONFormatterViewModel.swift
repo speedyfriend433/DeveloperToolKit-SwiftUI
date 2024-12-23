@@ -6,66 +6,54 @@
 //
 
 import SwiftUI
-import Combine
 
 @MainActor
 class JSONFormatterViewModel: ObservableObject {
-    @Published var inputJSON: String = ""
-    @Published var formattedJSON: String = ""
+    @Published var inputJSON = ""
+    @Published var formattedJSON = ""
+    @Published var options = JSONFormatterOptions()
     @Published var alertItem: AlertItem?
-    @Published var options: JSONFormatterOptions = JSONFormatterOptions()
     
-    func formatJSON() async {
-        guard !inputJSON.isEmpty else {
-            showError("Please enter JSON to format")
-            return
-        }
+    func formatJSON() {
+        guard !inputJSON.isEmpty else { return }
         
         do {
             formattedJSON = try JSONFormatter.format(inputJSON, options: options)
         } catch {
-            showError("Invalid JSON: \(error.localizedDescription)")
+            alertItem = AlertItem(
+                title: "Error",
+                message: "Invalid JSON: \(error.localizedDescription)",
+                dismissButton: "OK"
+            )
         }
     }
     
-    func minifyJSON() async {
-        guard !inputJSON.isEmpty else {
-            showError("Please enter JSON to minify")
-            return
-        }
+    func minifyJSON() {
+        guard !inputJSON.isEmpty else { return }
         
         do {
             formattedJSON = try JSONFormatter.minify(inputJSON)
         } catch {
-            showError("Invalid JSON: \(error.localizedDescription)")
+            alertItem = AlertItem(
+                title: "Error",
+                message: "Invalid JSON: \(error.localizedDescription)",
+                dismissButton: "OK"
+            )
         }
     }
     
-    func copyToClipboard() async {
-        guard !formattedJSON.isEmpty else {
-            showError("No formatted JSON to copy")
-            return
-        }
-        
+    func copyToClipboard() {
+        guard !formattedJSON.isEmpty else { return }
         UIPasteboard.general.string = formattedJSON
-        alertItem = AlertItem(
-            title: "Success",
-            message: "JSON copied to clipboard",
-            dismissButton: "OK"
-        )
     }
     
-    func clearAll() async {
+    func pasteFromClipboard() {
+        guard let string = UIPasteboard.general.string else { return }
+        inputJSON = string
+    }
+    
+    func clearAll() {
         inputJSON = ""
         formattedJSON = ""
-        options = JSONFormatterOptions()
-    }
-    
-    private func showError(_ message: String) {
-        alertItem = AlertItem(
-            title: "Error",
-            message: message,
-            dismissButton: "OK"
-        )
     }
 }

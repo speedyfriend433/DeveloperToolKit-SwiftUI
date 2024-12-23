@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E1300E12D1927980043E38A /* JSONSamplesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1300E02D1927980043E38A /* JSONSamplesView.swift */; };
+		8E1300E32D1927B20043E38A /* JSONSample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1300E22D1927B20043E38A /* JSONSample.swift */; };
+		8E1300E52D19349E0043E38A /* CustomTransformerClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1300E42D19349E0043E38A /* CustomTransformerClass.swift */; };
+		8E1300F12D1947580043E38A /* RegexPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E1300F02D1947580043E38A /* RegexPattern.swift */; };
 		8E28E2EC2D1720AF00C23C1D /* DeveloperToolKitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E28E2EB2D1720AF00C23C1D /* DeveloperToolKitApp.swift */; };
 		8E28E2EE2D1720AF00C23C1D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E28E2ED2D1720AF00C23C1D /* ContentView.swift */; };
 		8E28E2F02D1720B100C23C1D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8E28E2EF2D1720B100C23C1D /* Assets.xcassets */; };
@@ -41,7 +45,6 @@
 		8E3B2E022D17BBFA00113550 /* CodeSnippet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E002D17BBFA00113550 /* CodeSnippet.xcdatamodeld */; };
 		8E3B2E042D17BC4C00113550 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E032D17BC4C00113550 /* CoreDataManager.swift */; };
 		8E3B2E062D17BF3800113550 /* SnippetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E052D17BF3800113550 /* SnippetModel.swift */; };
-		8E3B2E082D17C0AE00113550 /* ArrayTransformer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */; };
 		8E3B2E0C2D17D77300113550 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0B2D17D77300113550 /* Theme.swift */; };
 		8E3B2E0E2D17E37F00113550 /* SamplePatternModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */; };
 		8E9559412D183B1300BCF6A7 /* DetailInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E9559402D183B1300BCF6A7 /* DetailInputField.swift */; };
@@ -79,6 +82,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8E1300E02D1927980043E38A /* JSONSamplesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSamplesView.swift; sourceTree = "<group>"; };
+		8E1300E22D1927B20043E38A /* JSONSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSample.swift; sourceTree = "<group>"; };
+		8E1300E42D19349E0043E38A /* CustomTransformerClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTransformerClass.swift; sourceTree = "<group>"; };
+		8E1300F02D1947580043E38A /* RegexPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegexPattern.swift; sourceTree = "<group>"; };
 		8E28E2E82D1720AF00C23C1D /* DeveloperToolKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DeveloperToolKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E28E2EB2D1720AF00C23C1D /* DeveloperToolKitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperToolKitApp.swift; sourceTree = "<group>"; };
 		8E28E2ED2D1720AF00C23C1D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -116,7 +123,6 @@
 		8E3B2E012D17BBFA00113550 /* CodeSnippet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CodeSnippet.xcdatamodel; sourceTree = "<group>"; };
 		8E3B2E032D17BC4C00113550 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		8E3B2E052D17BF3800113550 /* SnippetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetModel.swift; sourceTree = "<group>"; };
-		8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayTransformer.swift; sourceTree = "<group>"; };
 		8E3B2E0B2D17D77300113550 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		8E3B2E0D2D17E37F00113550 /* SamplePatternModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SamplePatternModel.swift; sourceTree = "<group>"; };
 		8E9559402D183B1300BCF6A7 /* DetailInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailInputField.swift; sourceTree = "<group>"; };
@@ -257,6 +263,8 @@
 				8E95594E2D1868EA00BCF6A7 /* RequestMethod.swift */,
 				8E9559502D186C1000BCF6A7 /* FormattingOptions.swift */,
 				8E9559542D186C9F00BCF6A7 /* FormatterTypes.swift */,
+				8E1300E22D1927B20043E38A /* JSONSample.swift */,
+				8E1300F02D1947580043E38A /* RegexPattern.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -276,8 +284,8 @@
 			children = (
 				8E28E33B2D17261400C23C1D /* AlertManager.swift */,
 				8E3B2DF12D17B4BC00113550 /* KeyboardToolbar.swift */,
-				8E3B2E072D17C0AE00113550 /* ArrayTransformer.swift */,
 				8E3B2E0B2D17D77300113550 /* Theme.swift */,
+				8E1300E42D19349E0043E38A /* CustomTransformerClass.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -340,6 +348,7 @@
 			isa = PBXGroup;
 			children = (
 				8E28E3302D17244000C23C1D /* JSONFormatterView.swift */,
+				8E1300E02D1927980043E38A /* JSONSamplesView.swift */,
 				8E95595E2D186E8200BCF6A7 /* FormatterOptionsView.swift */,
 				8E9559442D18495B00BCF6A7 /* JSONFormatterOptions.swift */,
 			);
@@ -564,13 +573,13 @@
 				8E28E3532D17276900C23C1D /* SnippetManagerViewModel.swift in Sources */,
 				8E95594D2D18688A00BCF6A7 /* RequestTemplate.swift in Sources */,
 				8E9559532D186C2500BCF6A7 /* JSONFormatterComponents.swift in Sources */,
-				8E3B2E082D17C0AE00113550 /* ArrayTransformer.swift in Sources */,
 				8E3B2DFA2D17B5CE00113550 /* AlertItem.swift in Sources */,
 				8E28E33A2D17249A00C23C1D /* JSONFormatter.swift in Sources */,
 				8E28E3442D1726E300C23C1D /* RegexTesterView.swift in Sources */,
 				8E28E3462D1726F800C23C1D /* RegexOptionsView.swift in Sources */,
 				8E3B2E0C2D17D77300113550 /* Theme.swift in Sources */,
 				8E28E3382D17248600C23C1D /* NetworkService.swift in Sources */,
+				8E1300F12D1947580043E38A /* RegexPattern.swift in Sources */,
 				8E9559592D186CC400BCF6A7 /* FormatterSyntaxView.swift in Sources */,
 				8E28E3552D17277B00C23C1D /* AddSnippetView.swift in Sources */,
 				8E3B2DF62D17B5A400113550 /* Header.swift in Sources */,
@@ -579,6 +588,7 @@
 				8E28E3312D17244000C23C1D /* JSONFormatterView.swift in Sources */,
 				8E28E2EE2D1720AF00C23C1D /* ContentView.swift in Sources */,
 				8E9559512D186C1000BCF6A7 /* FormattingOptions.swift in Sources */,
+				8E1300E32D1927B20043E38A /* JSONSample.swift in Sources */,
 				8E28E3292D1722CC00C23C1D /* APITesterView.swift in Sources */,
 				8E28E2EC2D1720AF00C23C1D /* DeveloperToolKitApp.swift in Sources */,
 				8E3B2E062D17BF3800113550 /* SnippetModel.swift in Sources */,
@@ -586,11 +596,13 @@
 				8E9559412D183B1300BCF6A7 /* DetailInputField.swift in Sources */,
 				8E28E3572D1727C400C23C1D /* SnippetDetailView.swift in Sources */,
 				8E3B2E042D17BC4C00113550 /* CoreDataManager.swift in Sources */,
+				8E1300E12D1927980043E38A /* JSONSamplesView.swift in Sources */,
 				8E3B2E022D17BBFA00113550 /* CodeSnippet.xcdatamodeld in Sources */,
 				8E3B2DF82D17B5B800113550 /* APIResponse.swift in Sources */,
 				8E28E3362D17247100C23C1D /* Models.swift in Sources */,
 				8E95595D2D186CEE00BCF6A7 /* FormatterActionButton.swift in Sources */,
 				8E9559552D186C9F00BCF6A7 /* FormatterTypes.swift in Sources */,
+				8E1300E52D19349E0043E38A /* CustomTransformerClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

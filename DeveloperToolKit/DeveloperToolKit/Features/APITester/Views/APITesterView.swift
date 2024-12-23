@@ -34,6 +34,37 @@ struct APITesterView: View {
             }
             .background(Theme.background)
             .navigationTitle("API Tester")
+            .toolbar {
+                // Navigation Bar Items
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Button {
+                            viewModel.showTemplates = true
+                        } label: {
+                            Label("Load Template", systemImage: "doc.text")
+                        }
+                        
+                        Button {
+                            viewModel.clearAll()
+                        } label: {
+                            Label("Clear All", systemImage: "trash")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                    }
+                }
+                
+                // Keyboard Toolbar
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        focusedField = nil
+                    }
+                }
+            }
+            .sheet(isPresented: $viewModel.showTemplates) {
+                TemplateLibraryView(viewModel: viewModel)
+            }
             .alert(item: $viewModel.alertItem) { alertItem in
                 Alert(
                     title: Text(alertItem.title),
@@ -46,30 +77,21 @@ struct APITesterView: View {
                     LoadingView()
                 }
             }
-            .addKeyboardToolbar()
         }
     }
     
     private var methodSelector: some View {
-        HStack(spacing: 0) {
+        Picker("Method", selection: $viewModel.selectedMethod) {
             ForEach(RequestMethod.allCases) { method in
-                MethodButton(
-                    method: method,
-                    isSelected: viewModel.selectedMethod == method,
-                    action: { viewModel.selectedMethod = method }
-                )
+                Text(method.rawValue).tag(method)
             }
         }
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Theme.border)
-        )
-        .padding(.vertical, 8)
+        .pickerStyle(.segmented)
     }
     
     private var urlInput: some View {
         TextField("Enter URL", text: $viewModel.url)
-            .textFieldStyle(ModernTextFieldStyle())
+            .textFieldStyle(.roundedBorder)
             .focused($focusedField, equals: .url)
             .autocapitalization(.none)
             .autocorrectionDisabled()
@@ -79,19 +101,16 @@ struct APITesterView: View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Headers")
                 .font(.headline)
-                .foregroundColor(Theme.text)
             
-            VStack(spacing: 8) {
-                ForEach(viewModel.headers.indices, id: \.self) { index in
-                    HeaderRowView(
-                        header: $viewModel.headers[index],
-                        onDelete: {
-                            Task {
-                                await viewModel.removeHeader(at: index)
-                            }
+            ForEach(viewModel.headers.indices, id: \.self) { index in
+                HeaderRowView(
+                    header: $viewModel.headers[index],
+                    onDelete: {
+                        Task {
+                            await viewModel.removeHeader(at: index)
                         }
-                    )
-                }
+                    }
+                )
             }
             
             Button(action: {
@@ -105,40 +124,27 @@ struct APITesterView: View {
                 }
                 .foregroundColor(Theme.primary)
             }
-            .padding(.top, 8)
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-        )
     }
     
     private var requestBodySection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Request Body")
                 .font(.headline)
-                .foregroundColor(Theme.text)
             
             TextEditor(text: $viewModel.requestBody)
                 .frame(height: 150)
                 .focused($focusedField, equals: .requestBody)
                 .font(.system(.body, design: .monospaced))
+                .scrollContentBackground(.hidden)
                 .padding(8)
                 .background(Color.white)
-                .cornerRadius(8)
+                .cornerRadius(12)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 8)
+                    RoundedRectangle(cornerRadius: 12)
                         .stroke(Theme.border, lineWidth: 1)
                 )
         }
-        .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.white)
-                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-        )
     }
     
     private var sendButton: some View {
@@ -152,31 +158,33 @@ struct APITesterView: View {
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Theme.primary)
-                        .shadow(color: Theme.primary.opacity(0.3), radius: 5, x: 0, y: 2)
-                )
+                .background(Theme.primary)
+                .cornerRadius(12)
         }
-        .padding(.vertical)
     }
 }
 
-struct MethodButton: View {
-    let method: RequestMethod
-    let isSelected: Bool
-    let action: () -> Void
-    
+struct LoadingView: View {
     var body: some View {
-        Button(action: action) {
-            Text(method.rawValue)
-                .font(.system(.subheadline, design: .rounded, weight: .medium))
-                .padding(.vertical, 8)
-                .padding(.horizontal, 12)
-                .frame(maxWidth: .infinity)
-                .background(isSelected ? Theme.primary : Color.clear)
-                .foregroundColor(isSelected ? .white : Theme.text)
-                .cornerRadius(8)
+        ZStack {
+            Color.black.opacity(0.2)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 16) {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .tint(Theme.primary)
+                
+                Text("Sending Request...")
+                    .font(.headline)
+                    .foregroundColor(Theme.text)
+            }
+            .padding(24)
+            .background(
+                RoundedRectangle(cornerRadius: 16)
+                    .fill(Color.white)
+                    .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 5)
+            )
         }
     }
 }

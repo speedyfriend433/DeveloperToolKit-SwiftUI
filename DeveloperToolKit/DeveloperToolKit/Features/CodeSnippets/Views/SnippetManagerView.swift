@@ -42,6 +42,49 @@ struct SnippetManagerView: View {
         }
     }
     
+    private var filterSection: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(viewModel.getAllTags(), id: \.self) { tag in
+                    FilterChip(
+                        title: tag,
+                        isSelected: viewModel.selectedTags.contains(tag)
+                    ) {
+                        if viewModel.selectedTags.contains(tag) {
+                            viewModel.selectedTags.remove(tag)
+                        } else {
+                            viewModel.selectedTags.insert(tag)
+                        }
+                        viewModel.loadSnippets()
+                    }
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+
+    struct FilterChip: View {
+        let title: String
+        let isSelected: Bool
+        let action: () -> Void
+        
+        var body: some View {
+            Button(action: action) {
+                Text(title)
+                    .font(.subheadline)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(isSelected ? Theme.primary : Theme.background)
+                    .foregroundColor(isSelected ? .white : Theme.text)
+                    .cornerRadius(15)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 15)
+                            .stroke(isSelected ? Theme.primary : Theme.text.opacity(0.3), lineWidth: 1)
+                    )
+            }
+        }
+    }
+    
     private var searchAndFilterBar: some View {
         VStack(spacing: 12) {
             // Search Bar
@@ -142,28 +185,6 @@ struct SnippetManagerView: View {
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.background)
-    }
-}
-
-struct FilterChip: View {
-    let title: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            Text(title)
-                .font(.subheadline)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 6)
-                .background(isSelected ? Theme.primary : Theme.background)
-                .foregroundColor(isSelected ? .white : Theme.text)
-                .cornerRadius(15)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 15)
-                        .stroke(isSelected ? Theme.primary : Theme.text.opacity(0.3), lineWidth: 1)
-                )
-        }
     }
 }
 

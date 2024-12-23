@@ -18,7 +18,29 @@ class APITesterViewModel: ObservableObject {
     @Published var alertItem: AlertItem?
     @Published var showTemplates = false
     
-    private let networkService = NetworkService()
+    func loadTemplate(_ template: RequestTemplate) {
+        // Convert template method string to RequestMethod
+        if let method = RequestMethod(rawValue: template.request.method) {
+            selectedMethod = method
+        }
+        
+        url = template.request.url
+        
+        // Convert template headers to Header objects
+        headers = template.request.headers.map { dict in
+            Header(key: dict["key"] ?? "", value: dict["value"] ?? "")
+        }
+        
+        requestBody = template.request.body
+    }
+    
+    func clearAll() {
+        selectedMethod = .get
+        url = ""
+        headers.removeAll()
+        requestBody = ""
+        response = nil
+    }
     
     func addHeader() async {
         headers.append(Header(key: "", value: ""))
@@ -58,18 +80,7 @@ class APITesterViewModel: ObservableObject {
         isLoading = false
     }
     
-    func loadTemplate(_ template: RequestTemplate) {
-        // Convert template request to view model state
-        url = template.request.url
-        selectedMethod = RequestMethod(rawValue: template.request.method) ?? .get
-        headers = template.request.headers.map { dict in
-            Header(key: dict["key"] ?? "", value: dict["value"] ?? "")
-        }
-        requestBody = template.request.body
-    }
-    
     func saveAsTemplate(name: String, description: String, category: String) {
-        // Convert view model state to template request
         let template = RequestTemplate(
             id: UUID(),
             name: name,

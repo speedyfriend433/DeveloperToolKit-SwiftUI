@@ -40,10 +40,8 @@ class SnippetManagerViewModel: ObservableObject {
         }
         
         if !selectedTags.isEmpty {
-            let tagPredicates = selectedTags.map { tag in
-                NSPredicate(format: "ANY tags == %@", tag)
-            }
-            predicates.append(NSCompoundPredicate(andPredicateWithSubpredicates: tagPredicates))
+            let tagPredicate = NSPredicate(format: "ANY tags IN %@", Array(selectedTags))
+            predicates.append(tagPredicate)
         }
         
         if !predicates.isEmpty {
@@ -81,19 +79,13 @@ class SnippetManagerViewModel: ObservableObject {
         entity.title = snippet.title
         entity.code = snippet.code
         entity.language = snippet.language
-        entity.tags = snippet.tags as NSObject
+        entity.tags = snippet.tags as NSArray
         entity.dateCreated = snippet.dateCreated
         
         do {
             try context.save()
             loadSnippets()
-            alertItem = AlertItem(
-                title: "Success",
-                message: "Snippet added successfully",
-                dismissButton: "OK"
-            )
         } catch {
-            print("Error adding snippet: \(error)")
             alertItem = AlertItem(
                 title: "Error",
                 message: "Failed to save snippet: \(error.localizedDescription)",
@@ -112,19 +104,12 @@ class SnippetManagerViewModel: ObservableObject {
                 entity.title = snippet.title
                 entity.code = snippet.code
                 entity.language = snippet.language
-                entity.tags = snippet.tags as NSObject
+                entity.tags = snippet.tags as NSArray
                 
                 try context.save()
                 loadSnippets()
-                
-                alertItem = AlertItem(
-                    title: "Success",
-                    message: "Snippet updated successfully",
-                    dismissButton: "OK"
-                )
             }
         } catch {
-            print("Error updating snippet: \(error)")
             alertItem = AlertItem(
                 title: "Error",
                 message: "Failed to update snippet: \(error.localizedDescription)",
@@ -146,7 +131,6 @@ class SnippetManagerViewModel: ObservableObject {
                     context.delete(entity)
                 }
             } catch {
-                print("Error deleting snippet: \(error)")
                 alertItem = AlertItem(
                     title: "Error",
                     message: "Failed to delete snippet: \(error.localizedDescription)",
@@ -159,33 +143,12 @@ class SnippetManagerViewModel: ObservableObject {
         do {
             try context.save()
             loadSnippets()
-            alertItem = AlertItem(
-                title: "Success",
-                message: "Snippet deleted successfully",
-                dismissButton: "OK"
-            )
         } catch {
-            print("Error saving after delete: \(error)")
             alertItem = AlertItem(
                 title: "Error",
                 message: "Failed to save changes: \(error.localizedDescription)",
                 dismissButton: "OK"
             )
-        }
-    }
-    
-    func getAllLanguages() -> [String] {
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "CodeSnippetEntity")
-        request.propertiesToFetch = ["language"]
-        request.returnsDistinctResults = true
-        request.resultType = .dictionaryResultType
-        
-        do {
-            let results = try context.fetch(request) as? [[String: String]] ?? []
-            return results.compactMap { $0["language"] }.sorted()
-        } catch {
-            print("Error fetching languages: \(error)")
-            return []
         }
     }
     
@@ -197,7 +160,6 @@ class SnippetManagerViewModel: ObservableObject {
             let allTags = entities.compactMap { $0.tags as? [String] }.flatMap { $0 }
             return Array(Set(allTags)).sorted()
         } catch {
-            print("Error fetching tags: \(error)")
             return []
         }
     }

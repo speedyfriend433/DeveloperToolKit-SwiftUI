@@ -11,38 +11,42 @@ import Foundation
 class RegexViewModel: ObservableObject {
     @Published var pattern: String = ""
     @Published var testString: String = ""
+    @Published var options = RegexOptions()
     @Published var matches: [String] = []
     @Published var alertItem: AlertItem?
-    @Published var options = RegexOptions()
-    
-    struct RegexOptions {
-        var caseInsensitive: Bool = false
-        var multiline: Bool = false
-        var dotMatchesAll: Bool = false
-    }
+    @Published var showSamples = false
     
     func performMatch() async {
-        guard !pattern.isEmpty else {
-            alertItem = AlertItem(
-                title: "Error",
-                message: "Please enter a regex pattern",
-                dismissButton: "OK"
-            )
-            return
+            guard !pattern.isEmpty else {
+                alertItem = AlertItem(
+                    title: "Error",
+                    message: "Please enter a regex pattern",
+                    dismissButton: "OK"
+                )
+                return
+            }
+            
+            do {
+                let regex = try createRegex()
+                matches = findMatches(with: regex)
+                
+                // Add feedback for no matches
+                if matches.isEmpty {
+                    alertItem = AlertItem(
+                        title: "No Matches",
+                        message: "No matches found for the current pattern",
+                        dismissButton: "OK"
+                    )
+                }
+            } catch {
+                alertItem = AlertItem(
+                    title: "Error",
+                    message: error.localizedDescription,
+                    dismissButton: "OK"
+                )
+                matches = []
+            }
         }
-        
-        do {
-            let regex = try createRegex()
-            matches = findMatches(with: regex)
-        } catch {
-            alertItem = AlertItem(
-                title: "Error",
-                message: error.localizedDescription,
-                dismissButton: "OK"
-            )
-            matches = []
-        }
-    }
     
     private func createRegex() throws -> NSRegularExpression {
         var regexOptions: NSRegularExpression.Options = []
@@ -70,11 +74,9 @@ class RegexViewModel: ObservableObject {
         }
     }
     
-    func applySamplePattern(_ sample: SamplePattern) {
-        pattern = sample.pattern
-        testString = sample.sampleText
-        Task {
-            await performMatch()
-        }
+    func clearAll() {
+        pattern = ""
+        testString = ""
+        matches = []
     }
 }
