@@ -48,7 +48,7 @@ All in one Developer Experiment Kits iOS APP! (Still WIP!)
 - Edit & Save
 - Date Viewer
 
-## Requirements
+## Screenshots
 
 ![STIIITCH_2024_12_23_04_40_26](https://github.com/user-attachments/assets/b292aaba-3a81-4468-8e92-301dbfb416d4)
 ![2nd](https://github.com/user-attachments/assets/3ba4f035-8870-4392-975b-e3b852d235a7)
