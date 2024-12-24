@@ -66,7 +66,7 @@ All in one Developer Experiment Kits iOS APP! (Still WIP!)
 1. Clone this repository
 
 ```bash
-git clone https://github.com/speedyfriend67/DeveloperToolKit-SwiftUI.git
+git clone https://github.com/speedyfriend433/DeveloperToolKit-SwiftUI.git
 
 Open the project in Xcode
 
@@ -99,7 +99,7 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 speedyfriend67 - speedyfriend433@gmail.com
 
-## Project Link: https://github.com/speedyfriend67/DeveloperToolKit-SwiftUI
+## Project Link: https://github.com/speedyfriend433/DeveloperToolKit-SwiftUI
 
 
 ## Future Enhancements
